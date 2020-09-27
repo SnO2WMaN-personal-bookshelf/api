@@ -1,9 +1,10 @@
 import {Module} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
+import {OpenBDModule} from './openbd/openbd.module';
 
 @Module({
-  imports: [],
+  imports: [OpenBDModule],
   controllers: [AppController],
   providers: [AppService],
 })

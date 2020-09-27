@@ -6,6 +6,16 @@
     "plugin:@shopify/prettier"
   ],
   "rules": {
-    "import/order": [0]
-  }
+    "import/order": [0],
+    "jest/valid-title": [0],
+    "jest/lowercase-name": [0]
+  },
+  "overrides": [
+    {
+      "files": ["*.module.ts"],
+      "rules": {
+        "@typescript-eslint/no-extraneous-class": [0]
+      }
+    }
+  ]
 }
