@@ -6,7 +6,7 @@ import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {BooksModule} from './books/books.module';
 import {BooksService} from './books/books.service';
-import mongooseConfig from './config/mongoose.config';
+import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
 import {OpenBDModule} from './openbd/openbd.module';
 import typeormConfig from './typeorm/typeorm.config';
