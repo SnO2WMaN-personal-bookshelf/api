@@ -4,7 +4,7 @@ import {of} from 'rxjs';
 import {OpenBDService} from './openbd.service';
 
 describe('OpenBDService', () => {
-  let service: OpenBDService;
+  let openBDService: OpenBDService;
   let httpService: HttpService;
 
   beforeEach(async () => {
@@ -13,7 +13,7 @@ describe('OpenBDService', () => {
       providers: [OpenBDService],
     }).compile();
 
-    service = module.get<OpenBDService>(OpenBDService);
+    openBDService = module.get<OpenBDService>(OpenBDService);
     httpService = module.get<HttpService>(HttpService);
   });
 
@@ -21,74 +21,86 @@ describe('OpenBDService', () => {
     jest.resetAllMocks();
   });
 
-  it('ISBNに結び付けられたcoverを返す', async () => {
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
-      of({
-        data: [
-          {
-            summary: {
-              cover: 'https://cover.openbd.jp/9784041098967.jpg',
-              isbn: '9784041098967',
-            },
-          },
-        ],
-      } as any),
-    );
-
-    const actual = await service.getCovers(['9784041098967']);
-    const expected = {
-      '9784041098967': 'https://cover.openbd.jp/9784041098967.jpg',
-    };
-
-    await expect(actual).toStrictEqual(expected);
+  it('should be defined', () => {
+    expect(openBDService).toBeDefined();
   });
 
-  it('ISBNに結び付けられたcoverが存在しない場合はnullを返す', async () => {
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
-      of({
-        data: [
-          {
-            summary: {
-              isbn: '9784041098967',
-              cover: '',
+  describe('getCover()', () => {
+    it('ISBNに結び付けられたcoverを返す', async () => {
+      jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
+        of({
+          data: [
+            {
+              summary: {
+                cover: 'https://cover.openbd.jp/9784041098967.jpg',
+                isbn: '9784041098967',
+              },
             },
-          },
-          {
-            summary: {
-              isbn: '9784757558052',
+          ],
+        } as any),
+      );
+
+      const actual = await openBDService.getCovers(['9784041098967']);
+      const expected = {
+        '9784041098967': 'https://cover.openbd.jp/9784041098967.jpg',
+      };
+
+      await expect(actual).toStrictEqual(expected);
+    });
+
+    it('ISBNに結び付けられたcoverが存在しない場合はnullを返す', async () => {
+      jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
+        of({
+          data: [
+            {
+              summary: {
+                isbn: '9784041098967',
+                cover: '',
+              },
             },
-          },
-        ],
-      } as any),
-    );
-
-    const actual = await service.getCovers(['9784041098967', '9784757558052']);
-    const expected = {'9784041098967': null, '9784757558052': null};
-
-    await expect(actual).toStrictEqual(expected);
-  });
-
-  it('APIから取得した配列にnullが含まれている場合', async () => {
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
-      of({
-        data: [
-          null,
-          {
-            summary: {
-              isbn: '9784041098967',
-              cover: 'https://cover.openbd.jp/9784041098967.jpg',
+            {
+              summary: {
+                isbn: '9784757558052',
+              },
             },
-          },
-        ],
-      } as any),
-    );
+          ],
+        } as any),
+      );
 
-    const actual = await service.getCovers(['9784757558052', '9784041098967']);
-    const expected = {
-      '9784757558052': null,
-      '9784041098967': 'https://cover.openbd.jp/9784041098967.jpg',
-    };
+      const actual = await openBDService.getCovers([
+        '9784041098967',
+        '9784757558052',
+      ]);
+      const expected = {'9784041098967': null, '9784757558052': null};
 
-    await expect(actual).toStrictEqual(expected);
+      await expect(actual).toStrictEqual(expected);
+    });
+
+    it('APIから取得した配列にnullが含まれている場合', async () => {
+      jest.spyOn(httpService, 'get').mockImplementationOnce(() =>
+        of({
+          data: [
+            null,
+            {
+              summary: {
+                isbn: '9784041098967',
+                cover: 'https://cover.openbd.jp/9784041098967.jpg',
+              },
+            },
+          ],
+        } as any),
+      );
+
+      const actual = await openBDService.getCovers([
+        '9784757558052',
+        '9784041098967',
+      ]);
+      const expected = {
+        '9784757558052': null,
+        '9784041098967': 'https://cover.openbd.jp/9784041098967.jpg',
+      };
+
+      await expect(actual).toStrictEqual(expected);
+    });
   });
 });
