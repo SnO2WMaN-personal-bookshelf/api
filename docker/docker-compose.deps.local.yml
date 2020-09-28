@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  mongo:
+    container_name: mongo-local
+    ports:
+      - ${MONGO_PORT}:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: bookshelf
+    volumes:
+      - ./mongo/initdb:/docker-entrypoint-initdb.d
+      - ./mongo/sample/books.json:/sample/books.json
