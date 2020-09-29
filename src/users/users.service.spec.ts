@@ -29,14 +29,16 @@ describe('UsersService', () => {
 
   describe('getUser()', () => {
     it('IDに結び付けられたユーザーを取得', async () => {
-      jest
-        .spyOn(usersRepogitory, 'findOne')
-        .mockResolvedValueOnce({id: '1', name: 'John', books: []});
+      jest.spyOn(usersRepogitory, 'findOne').mockResolvedValueOnce({
+        id: '1',
+        name: 'John',
+        readBooks: {id: '1', books: []},
+      });
 
       const user = await usersService.getUser('1');
       expect(user).toHaveProperty('id');
       expect(user).toHaveProperty('name');
-      expect(user).toHaveProperty('books');
+      expect(user).toHaveProperty('readBooks');
     });
 
     it('IDに結び付けられたユーザーが存在しない場合はnullを返す', async () => {

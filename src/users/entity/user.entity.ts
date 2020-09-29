@@ -1,4 +1,11 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import {Bookshelf} from '../../bookshelves/entity/bookshelf.entity';
 
 @Entity()
 export class User {
@@ -8,6 +15,7 @@ export class User {
   @Column()
   name!: string;
 
-  @Column()
-  books!: string[];
+  @OneToOne((type) => Bookshelf)
+  @JoinColumn()
+  readBooks!: Bookshelf;
 }
