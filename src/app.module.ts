@@ -2,8 +2,6 @@ import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
 import {BooksModule} from './books/books.module';
 import {BooksService} from './books/books.service';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
@@ -29,7 +27,5 @@ import {UsersModule} from './users/users.module';
     UsersModule,
     BookshelvesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, BooksService],
 })
 export class AppModule {}
