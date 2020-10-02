@@ -54,8 +54,7 @@ export class BookshelvesResolver {
 
   @Query(() => Bookshelf, {nullable: true})
   async bookshelf(@Args('id', {type: () => ID}) id: string) {
-    return {id: '1'};
-    //  return this.bookshelvesService.getBookshelf(id);
+    return this.bookshelvesService.getBookshelf(id);
   }
 
   @ResolveField((of) => PaginatedBook)
