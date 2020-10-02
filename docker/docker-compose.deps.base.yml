@@ -2,6 +2,10 @@ version: '3.7'
 
 services:
   mongo:
-    image: mongo:latest
+    image: mongo:4
+    environment:
+      TZ: Asia/Tokyo
+  postgresql:
+    image: postgres:latest
     environment:
       TZ: Asia/Tokyo

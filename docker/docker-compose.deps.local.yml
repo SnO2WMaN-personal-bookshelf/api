@@ -2,13 +2,32 @@ version: '3.7'
 
 services:
   mongo:
-    container_name: mongo-local
     ports:
       - ${MONGO_PORT}:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pass
-      MONGO_INITDB_DATABASE: bookshelf
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - ./mongo/initdb:/docker-entrypoint-initdb.d
       - ./mongo/sample/books.json:/sample/books.json
+  postgresql:
+    environment:
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    ports:
+      - ${TYPEORM_PORT}:5432
+  pgweb:
+    image: sosedoff/pgweb:latest
+    depends_on:
+      - postgresql
+    ports:
+      - 8081:8081
+    environment:
+      DATABASE_URL: postgres://${TYPEORM_USERNAME}:${TYPEORM_PASSWORD}@postgresql:${TYPEORM_PORT}/${TYPEORM_DATABASE}?sslmode=disable
+
+volumes:
+  postgresql-data:
