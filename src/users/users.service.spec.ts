@@ -32,7 +32,7 @@ describe('UsersService', () => {
       jest.spyOn(usersRepogitory, 'findOne').mockResolvedValueOnce({
         id: '1',
         name: 'John',
-        readBooks: {id: '1', books: []},
+        readBooks: {id: '1', bookIDs: []},
       });
 
       const user = await usersService.getUser('1');

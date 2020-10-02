@@ -33,11 +33,11 @@ describe('BookshelvesService', () => {
     it('IDに結び付けられたBookshelfを取得', async () => {
       jest
         .spyOn(bookshelfRepogitory, 'findOne')
-        .mockResolvedValueOnce({id: '1', books: []});
+        .mockResolvedValueOnce({id: '1', bookIDs: []});
 
       const bookshelf = await bookshelfService.getBookshelf('1');
       expect(bookshelf).toHaveProperty('id');
-      expect(bookshelf).toHaveProperty('books');
+      expect(bookshelf).toHaveProperty('bookIDs');
     });
 
     it('IDに結び付けられたBookshelfが存在しない場合はnullを返す', async () => {

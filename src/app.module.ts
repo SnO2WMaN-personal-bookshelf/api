@@ -1,9 +1,9 @@
 import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
+import {GraphQLModule} from '@nestjs/graphql';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {BooksModule} from './books/books.module';
-import {BooksService} from './books/books.service';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
 import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
@@ -14,7 +14,9 @@ import {UsersModule} from './users/users.module';
 
 @Module({
   imports: [
-    OpenBDModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule.forFeature(mongooseConfig)],
       useClass: MongooseService,
@@ -23,8 +25,9 @@ import {UsersModule} from './users/users.module';
       imports: [ConfigModule.forFeature(typeormConfig)],
       useClass: TypeORMConfigService,
     }),
-    BooksModule,
+    OpenBDModule,
     UsersModule,
+    BooksModule,
     BookshelvesModule,
   ],
 })
