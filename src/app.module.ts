@@ -3,6 +3,7 @@ import {ConfigModule} from '@nestjs/config';
 import {GraphQLModule} from '@nestjs/graphql';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
+import {Auth0Module} from './auth0/auth0.module';
 import {BooksModule} from './books/books.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
 import mongooseConfig from './mongoose/mongoose.config';
@@ -16,6 +17,7 @@ import {UsersModule} from './users/users.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      context: ({req}) => ({req}),
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule.forFeature(mongooseConfig)],
@@ -29,6 +31,7 @@ import {UsersModule} from './users/users.module';
     UsersModule,
     BooksModule,
     BookshelvesModule,
+    Auth0Module,
   ],
 })
 export class AppModule {}
