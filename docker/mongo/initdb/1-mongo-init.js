@@ -1,13 +1,8 @@
 /* global db */
 
 db.createUser({
-  user: 'root',
-  pwd: 'pass',
-  roles: [
-    {
-      role: 'dbOwner',
-      db: 'bookshelf',
-    },
-  ],
+  user: 'sample',
+  pwd: 'password',
+  roles: [{role: 'readWrite', db: 'bookshelf'}],
 });
 db.createCollection('books');
