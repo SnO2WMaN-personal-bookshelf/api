@@ -1,9 +1,10 @@
-import {ValidationPipe} from '@nestjs/common';
+import {UseGuards, ValidationPipe} from '@nestjs/common';
 import {
   Args,
   Field,
   ID,
   Int,
+  Mutation,
   ObjectType,
   Parent,
   Query,
@@ -11,6 +12,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import {decode, encode} from 'js-base64';
+import {GraphqlAuthGuard} from '../auth/graphql-auth.guard';
 import {BooksService} from '../books/books.service';
 import {Book} from '../books/schema/book.schema';
 import {
@@ -98,5 +100,14 @@ export class BookshelvesResolver {
       nodes,
       totalItems: bookshelf.bookIDs.length,
     };
+  }
+
+  @Mutation((returns) => Bookshelf)
+  @UseGuards(GraphqlAuthGuard)
+  async addBooksToBookshelf(
+    @Args('bookshelf', {type: () => ID}) id: string,
+    @Args('books', {type: () => [ID]}) books: string[],
+  ) {
+    return this.bookshelvesService.addBooksToBookshelf(id, books);
   }
 }

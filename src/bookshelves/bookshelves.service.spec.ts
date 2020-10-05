@@ -49,4 +49,47 @@ describe('BookshelvesService', () => {
       expect(bookshelf).toBeNull();
     });
   });
+
+  describe('addBooksToBookshelf', () => {
+    it('IDに結び付けられたBookshelfにまだ登録されていないBookIDを複数追加', async () => {
+      jest
+        .spyOn(bookshelfRepogitory, 'findOne')
+        .mockResolvedValueOnce({id: '1', bookIDs: []});
+
+      const actual = await bookshelfService.addBooksToBookshelf('1', [
+        '1',
+        '2',
+      ]);
+
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('id');
+      expect(actual).toHaveProperty('bookIDs', ['1']);
+    });
+
+    it('IDに結び付けられたBookshelfにすでに登録されているBookIDを複数追加', async () => {
+      jest
+        .spyOn(bookshelfRepogitory, 'findOne')
+        .mockResolvedValueOnce({id: '1', bookIDs: ['1', '2']});
+
+      const actual = await bookshelfService.addBooksToBookshelf('1', [
+        '1',
+        '2',
+        '3',
+      ]);
+
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('id');
+      expect(actual).toHaveProperty('bookIDs', ['1', '2', '3']);
+    });
+
+    it('IDに結び付けられたBookshelfが存在しない場合はnullを返す', async () => {
+      jest
+        .spyOn(bookshelfRepogitory, 'findOne')
+        .mockResolvedValueOnce(undefined);
+
+      const actual = await bookshelfService.addBooksToBookshelf('1', ['1']);
+
+      expect(actual).toBeNull();
+    });
+  });
 });
