@@ -11,6 +11,8 @@ services:
     volumes:
       - ./mongo/initdb:/docker-entrypoint-initdb.d
       - ./mongo/sample/books.json:/sample/books.json
+    networks:
+      - mypcdb-local-network
   postgresql:
     environment:
       POSTGRES_DB: ${TYPEORM_DATABASE}
@@ -20,6 +22,8 @@ services:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - ${TYPEORM_PORT}:5432
+    networks:
+      - mypcdb-local-network
   pgweb:
     image: sosedoff/pgweb:latest
     depends_on:
@@ -28,6 +32,20 @@ services:
       - 8081:8081
     environment:
       DATABASE_URL: postgres://${TYPEORM_USERNAME}:${TYPEORM_PASSWORD}@postgresql:${TYPEORM_PORT}/${TYPEORM_DATABASE}?sslmode=disable
+    networks:
+      - mypcdb-local-network
+  adminer:
+    image: adminer:latest
+    depends_on:
+      - postgresql
+    ports:
+      - 8080:8080
+    networks:
+      - mypcdb-local-network
 
 volumes:
   postgresql-data:
+
+networks:
+  mypcdb-local-network:
+    driver: bridge
