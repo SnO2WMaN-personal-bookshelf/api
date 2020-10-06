@@ -26,7 +26,7 @@ export class OpenBDService {
 
     const fetched = await this.httpService
       .get<(null | APIPayload)[]>('https://api.openbd.jp/v1/get', {
-        params: {isbn: array},
+        params: {isbn: array.join(',')},
       })
       .toPromise()
       .then(({data}) =>
