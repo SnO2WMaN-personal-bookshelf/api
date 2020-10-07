@@ -10,6 +10,8 @@ export class UsersService {
   ) {}
 
   async getUser(id: string): Promise<User | null> {
-    return this.usersRepository.findOne(id).then((user) => user || null);
+    return this.usersRepository
+      .findOne(id, {relations: ['readBooks']})
+      .then((user) => user || null);
   }
 }
