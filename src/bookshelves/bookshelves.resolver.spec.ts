@@ -95,7 +95,6 @@ describe('BookshelvesResolver', () => {
         pageInfo,
         edges,
       } = await bookshelvesResolver.books(bookshelf, {
-        after: encode('0'),
         first: 50,
       });
 
@@ -130,7 +129,6 @@ describe('BookshelvesResolver', () => {
         pageInfo,
         edges,
       } = await bookshelvesResolver.books(bookshelf, {
-        after: encode('0'),
         first: 50,
       });
 
@@ -178,15 +176,15 @@ describe('BookshelvesResolver', () => {
       expect(edges).toHaveLength(50);
 
       expect(edges![0]).toBeDefined();
-      expect(edges![0]).toHaveProperty('cursor', encode('20'));
+      expect(edges![0]).toHaveProperty('cursor', encode('21'));
 
       expect(edges![edges!.length - 1]).toBeDefined();
-      expect(edges![edges!.length - 1]).toHaveProperty('cursor', encode('69'));
+      expect(edges![edges!.length - 1]).toHaveProperty('cursor', encode('70'));
 
       expect(pageInfo).toHaveProperty('hasPreviousPage', true);
       expect(pageInfo).toHaveProperty('hasNextPage', true);
-      expect(pageInfo).toHaveProperty('startCursor', encode('20'));
-      expect(pageInfo).toHaveProperty('endCursor', encode('69'));
+      expect(pageInfo).toHaveProperty('startCursor', encode('21'));
+      expect(pageInfo).toHaveProperty('endCursor', encode('70'));
     });
   });
 });

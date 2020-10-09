@@ -68,7 +68,7 @@ export class BookshelvesResolver {
     {after: afterEncoded, first = FETCH_DEFAULT}: PaginateArgsType,
   ): Promise<PaginatedBook> {
     const afterDecoed =
-      (afterEncoded && parseInt(decode(afterEncoded), 10)) || 0;
+      (afterEncoded && parseInt(decode(afterEncoded), 10) + 1) || 0;
 
     const sliced = bookshelf.bookIDs.slice(afterDecoed, afterDecoed + first);
 
