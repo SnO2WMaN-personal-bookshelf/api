@@ -19,8 +19,18 @@ export class User {
   @Field()
   name!: string;
 
-  @OneToOne((type) => Bookshelf)
+  @OneToOne((type) => Bookshelf, {nullable: false})
   @JoinColumn()
   @Field(() => Bookshelf)
   readBooks!: Bookshelf;
+
+  @OneToOne((type) => Bookshelf, {nullable: false})
+  @JoinColumn()
+  @Field(() => Bookshelf)
+  readingBooks!: Bookshelf;
+
+  @OneToOne((type) => Bookshelf, {nullable: false})
+  @JoinColumn()
+  @Field(() => Bookshelf)
+  wishBooks!: Bookshelf;
 }
