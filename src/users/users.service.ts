@@ -14,4 +14,14 @@ export class UsersService {
       .findOne(id, {relations: ['readBooks', 'readingBooks', 'wishBooks']})
       .then((user) => user || null);
   }
+
+  async createUser({
+    id,
+    name,
+  }: {
+    id: string;
+    name: string;
+  }): Promise<User | null> {
+    return this.usersRepository.create({id, name});
+  }
 }
