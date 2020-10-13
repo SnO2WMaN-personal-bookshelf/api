@@ -1,8 +1,10 @@
 import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
+import {APP_GUARD} from '@nestjs/core';
 import {GraphQLModule} from '@nestjs/graphql';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
+import {GraphqlAuthGuard} from './auth/graphql-auth.guard';
 import {Auth0Module} from './auth0/auth0.module';
 import {BooksModule} from './books/books.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
@@ -32,6 +34,12 @@ import {UsersModule} from './users/users.module';
     BooksModule,
     BookshelvesModule,
     Auth0Module,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: GraphqlAuthGuard,
+    },
   ],
 })
 export class AppModule {}
