@@ -1,7 +1,6 @@
-import {UseGuards} from '@nestjs/common';
-import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
-import {CurrentUser} from '../auth/current-user.decorator';
-import {GraphqlAuthGuard} from '../auth/graphql-auth.guard';
+import {Args, ID, Query, Resolver} from '@nestjs/graphql';
+import {Auth0Identify} from '../decolators/auth0-identify.decorator';
+import {CurrentUser} from '../decolators/current-user.decolator';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -10,22 +9,37 @@ export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
   @Query(() => User, {nullable: true})
-  async user(@Args('id', {type: () => ID}) id: string) {
-    return this.usersService.getUser(id);
+  async user(
+    @Args('id', {type: () => ID, nullable: true}) id?: string,
+    @Args('name', {type: () => String, nullable: true}) name?: string,
+  ) {
+    if (name) {
+      return this.usersService.getUserByName(name).then((user) => user || null);
+    } else if (id) {
+      return this.usersService.getUser(id).then((user) => user || null);
+    }
+
+    return null;
   }
 
-  @Query(() => User)
-  @UseGuards(GraphqlAuthGuard)
-  async currentUser(@CurrentUser() user: User) {
-    return this.user(user.id);
-  }
+  @Query(() => User, {nullable: false})
+  async currentUser(
+    @CurrentUser() {sub}: {sub: string},
+    @Auth0Identify()
+    {
+      picture,
+      nickname,
+      name,
+    }: Partial<{picture: string; nickname: string; name: string}>,
+  ) {
+    if (!nickname || !name) {
+      throw new Error();
+    }
 
-  @Mutation(() => User)
-  @UseGuards(GraphqlAuthGuard)
-  async createUser(@CurrentUser() user: User) {
-    return (
-      (await this.currentUser(user)) &&
-      this.usersService.createUser({id: user.id, name: user.name})
-    );
+    return this.usersService.getUserFromAuth0Sub(sub, {
+      picture,
+      name: nickname,
+      displayName: name,
+    });
   }
 }

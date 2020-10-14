@@ -4,10 +4,11 @@ import {APP_GUARD} from '@nestjs/core';
 import {GraphQLModule} from '@nestjs/graphql';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import {GraphqlAuthGuard} from './auth/graphql-auth.guard';
 import {Auth0Module} from './auth0/auth0.module';
 import {BooksModule} from './books/books.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
+import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
+import {GraphQLAuth0IdentifyGuard} from './guards/graphql-auth0-identify.guard';
 import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
 import {OpenBDModule} from './openbd/openbd.module';
@@ -38,7 +39,11 @@ import {UsersModule} from './users/users.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: GraphqlAuthGuard,
+      useClass: GraphQLAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: GraphQLAuth0IdentifyGuard,
     },
   ],
 })

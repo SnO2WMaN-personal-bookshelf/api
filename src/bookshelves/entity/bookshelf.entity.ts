@@ -4,7 +4,7 @@ import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 @Entity()
 @ObjectType()
 export class Bookshelf {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @Field((type) => ID)
   id!: string;
 
