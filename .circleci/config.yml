@@ -1,0 +1,90 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.0.0
+  docker: circleci/docker@1.4.0
+  codecov: codecov/codecov@1.1.1
+  fossa-cli: fossa/cli@0.0.3
+
+jobs:
+  build:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn build
+      - store_artifacts:
+          path: ./dist
+
+  build-docker:
+    executor: docker/machine
+    steps:
+      - checkout
+      - docker/check
+      - docker/build:
+          image: bookshelf/nest-api
+
+  lint-prettier:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn lint:prettier
+
+  lint-eslint:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - restore_cache:
+          key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run: yarn lint:eslint --cache --format junit --output-file ./junit/eslint.xml
+      - save_cache:
+          key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - .eslintcache
+      - store_test_results:
+          path: ./junit
+
+  test:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: |
+            yarn test --ci \
+              --reporters=default --reporters=jest-junit \
+              --testResultsProcessor=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./junit
+            JEST_JUNIT_OUTPUT_NAME: jest.xml
+      - store_test_results:
+          path: ./junit
+      - store_artifacts:
+          path: ./coverage
+      - codecov/upload:
+          file: ./coverage/lcov.info
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - lint-eslint
+      - lint-prettier
+      - test
+      - build:
+          requires:
+            - test
