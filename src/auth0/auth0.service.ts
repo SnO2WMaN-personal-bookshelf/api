@@ -4,6 +4,9 @@ import auth0Config from './auth0.config';
 
 export interface UserInfo {
   sub: string;
+  picture?: string;
+  name: string;
+  nickname: string;
 }
 
 @Injectable()

@@ -29,34 +29,35 @@ export class UsersService {
       .then((user) => user && this.getUser(user.id));
   }
 
-  async getUserFromAuth0Sub(
-    sub: string,
-    payload: {
-      picture?: string;
-      name: string;
-      displayName: string;
-    },
-  ) {
+  async getUserFromAuth0Sub(sub: string) {
     const user = await this.usersRepository.findOne({
       where: {auth0Sub: sub},
       select: ['id'],
     });
-    if (user) return this.getUser(user.id);
-    else {
-      const readBooks = this.bookshelvesRepository.create({bookIDs: []});
-      const readingBooks = this.bookshelvesRepository.create({bookIDs: []});
-      const wishBooks = this.bookshelvesRepository.create({bookIDs: []});
+    return user && this.getUser(user.id);
+  }
 
-      const newUser = await this.usersRepository.create({
-        auth0Sub: sub,
-        readBooks,
-        readingBooks,
-        wishBooks,
-        ...payload,
-      });
-      await this.usersRepository.save(newUser);
-      return this.getUser(newUser.id);
-    }
+  async createUser({
+    sub: auth0Sub,
+    ...payload
+  }: {
+    sub: string;
+    picture?: string;
+    name: string;
+    displayName: string;
+  }) {
+    const readBooks = this.bookshelvesRepository.create({bookIDs: []});
+    const readingBooks = this.bookshelvesRepository.create({bookIDs: []});
+    const wishBooks = this.bookshelvesRepository.create({bookIDs: []});
+
+    const newUser = await this.usersRepository.create({
+      readBooks,
+      readingBooks,
+      wishBooks,
+      auth0Sub,
+      ...payload,
+    });
+    return this.usersRepository.save(newUser);
   }
 
   /*

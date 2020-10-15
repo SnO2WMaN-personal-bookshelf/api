@@ -1,12 +1,17 @@
+import {ForbiddenException} from '@nestjs/common';
 import {Args, ID, Query, Resolver} from '@nestjs/graphql';
-import {Auth0Identify} from '../decolators/auth0-identify.decorator';
+import {Auth0Service} from '../auth0/auth0.service';
 import {CurrentUser} from '../decolators/current-user.decolator';
+import {GraphQLHeadersAuthorization} from '../decolators/graphql-headers.decorator';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private readonly auth0Service: Auth0Service,
+  ) {}
 
   @Query(() => User, {nullable: true})
   async user(
@@ -25,21 +30,23 @@ export class UsersResolver {
   @Query(() => User, {nullable: false})
   async currentUser(
     @CurrentUser() {sub}: {sub: string},
-    @Auth0Identify()
-    {
-      picture,
-      nickname,
-      name,
-    }: Partial<{picture: string; nickname: string; name: string}>,
+    @GraphQLHeadersAuthorization('authorization') authorization?: string,
   ) {
-    if (!nickname || !name) {
-      throw new Error();
-    }
+    const existsUser = await this.usersService.getUserFromAuth0Sub(sub);
+    if (existsUser) return existsUser;
 
-    return this.usersService.getUserFromAuth0Sub(sub, {
-      picture,
-      name: nickname,
-      displayName: name,
-    });
+    if (authorization) {
+      const identify = await this.auth0Service.getIdentify(authorization);
+      if (identify) {
+        return this.usersService
+          .createUser({
+            ...identify,
+            displayName: identify.name,
+            name: identify.nickname,
+          })
+          .then((newUser) => this.usersService.getUser(newUser.id));
+      }
+    }
+    throw new ForbiddenException();
   }
 }
