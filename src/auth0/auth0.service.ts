@@ -1,6 +1,6 @@
 import {HttpService, Inject, Injectable} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
-import auth0Config from './auth0.config';
+import auth0Config from '../configs/auth0.config';
 
 export interface UserInfo {
   sub: string;

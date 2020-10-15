@@ -2,8 +2,8 @@ import {Inject, Injectable} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
 import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from '@nestjs/typeorm';
 import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
+import typeormConfig from '../configs/typeorm.config';
 import {User} from '../users/entity/user.entity';
-import typeormConfig from './typeorm.config';
 
 @Injectable()
 export class TypeORMConfigService implements TypeOrmOptionsFactory {

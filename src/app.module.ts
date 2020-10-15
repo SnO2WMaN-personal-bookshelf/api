@@ -8,11 +8,11 @@ import {AuthModule} from './auth/auth.module';
 import {Auth0Module} from './auth0/auth0.module';
 import {BooksModule} from './books/books.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
+import mongooseConfig from './configs/mongoose.config';
+import typeormConfig from './configs/typeorm.config';
 import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
-import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
 import {OpenBDModule} from './openbd/openbd.module';
-import typeormConfig from './typeorm/typeorm.config';
 import {TypeORMConfigService} from './typeorm/typeorm.service';
 import {UsersModule} from './users/users.module';
 

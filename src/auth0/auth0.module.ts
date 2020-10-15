@@ -1,6 +1,6 @@
 import {HttpModule, Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
-import auth0Config from './auth0.config';
+import auth0Config from '../configs/auth0.config';
 import {Auth0Service} from './auth0.service';
 
 @Module({
