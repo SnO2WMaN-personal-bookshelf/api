@@ -85,6 +85,12 @@ workflows:
       - lint-eslint
       - lint-prettier
       - test
+      - docker/hadolint:
+          dockerfiles: Dockerfile
       - build:
           requires:
             - test
+      - build-docker:
+          requires:
+            - docker/hadolint
+            - build
