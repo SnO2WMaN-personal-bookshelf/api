@@ -19,4 +19,9 @@ export class BooksResolver {
   async cover(@Parent() {isbn}: Book): Promise<string | null> {
     return isbn ? this.openBDService.getCover(isbn) : null;
   }
+
+  @Query(() => [String])
+  async getAllBookIDs() {
+    return this.bookService.getAllBookIDs();
+  }
 }

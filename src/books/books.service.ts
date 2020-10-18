@@ -13,4 +13,8 @@ export class BooksService {
   async getBook(id: string) {
     return this.bookModel.findById(id);
   }
+
+  async getAllBookIDs() {
+    return this.bookModel.find().then((books) => books.map(({id}) => id));
+  }
 }
