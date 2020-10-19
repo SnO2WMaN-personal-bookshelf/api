@@ -49,4 +49,9 @@ export class UsersResolver {
     }
     throw new ForbiddenException();
   }
+
+  @Query(() => [User])
+  async allUsers() {
+    return this.usersService.allUsers();
+  }
 }

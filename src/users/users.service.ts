@@ -65,4 +65,8 @@ export class UsersService {
     return this.usersRepository.create({ name});
   }
   */
+
+  async allUsers() {
+    return this.usersRepository.find();
+  }
 }
