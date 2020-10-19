@@ -20,8 +20,8 @@ export class BooksResolver {
     return isbn ? this.openBDService.getCover(isbn) : null;
   }
 
-  @Query(() => [String])
-  async getAllBookIDs() {
-    return this.bookService.getAllBookIDs();
+  @Query(() => [Book])
+  async allBooks() {
+    return this.bookService.getAllBooks();
   }
 }

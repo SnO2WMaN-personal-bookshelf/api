@@ -14,7 +14,7 @@ export class BooksService {
     return this.bookModel.findById(id);
   }
 
-  async getAllBookIDs() {
-    return this.bookModel.find().then((books) => books.map(({id}) => id));
+  async getAllBooks() {
+    return this.bookModel.find();
   }
 }
