@@ -7,6 +7,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import {AuthModule} from './auth/auth.module';
 import {Auth0Module} from './auth0/auth0.module';
 import {BooksModule} from './books/books.module';
+import {BookshelfRecordsModule} from './bookshelf-records/bookshelf-records.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
 import mongooseConfig from './configs/mongoose.config';
 import typeormConfig from './configs/typeorm.config';
@@ -34,6 +35,7 @@ import {UsersModule} from './users/users.module';
     UsersModule,
     BooksModule,
     BookshelvesModule,
+    BookshelfRecordsModule,
     AuthModule,
     Auth0Module,
   ],

@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
 import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from '@nestjs/typeorm';
+import {BookshelfRecord} from '../bookshelf-records/entity/bookshelf-record.entity';
 import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
 import typeormConfig from '../configs/typeorm.config';
 import {User} from '../users/entity/user.entity';
@@ -20,7 +21,7 @@ export class TypeORMConfigService implements TypeOrmOptionsFactory {
       username: this.configService.username,
       password: this.configService.password,
       database: this.configService.database,
-      entities: [User, Bookshelf],
+      entities: [User, Bookshelf, BookshelfRecord],
       synchronize: true,
     };
   }

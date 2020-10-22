@@ -17,4 +17,8 @@ export class BooksService {
   async getAllBooks() {
     return this.bookModel.find();
   }
+
+  async exists(id: string): Promise<boolean> {
+    return this.bookModel.exists({_id: id});
+  }
 }
