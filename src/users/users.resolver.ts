@@ -2,7 +2,7 @@ import {ForbiddenException} from '@nestjs/common';
 import {Args, ID, Query, Resolver} from '@nestjs/graphql';
 import {Auth0Service} from '../auth0/auth0.service';
 import {CurrentUser} from '../decolators/current-user.decolator';
-import {GraphQLHeadersAuthorization} from '../decolators/graphql-headers.decorator';
+import {GraphQLHeaders} from '../decolators/graphql-headers.decorator';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -30,7 +30,7 @@ export class UsersResolver {
   @Query(() => User, {nullable: false})
   async currentUser(
     @CurrentUser() {sub}: {sub: string},
-    @GraphQLHeadersAuthorization('authorization') authorization?: string,
+    @GraphQLHeaders('authorization') authorization?: string,
   ) {
     const existsUser = await this.usersService.getUserFromAuth0Sub(sub);
     if (existsUser) return existsUser;
