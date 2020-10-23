@@ -10,8 +10,11 @@ export class BooksService {
     private readonly bookModel: Model<Book>,
   ) {}
 
-  async getBook(id: string) {
-    return this.bookModel.findById(id);
+  async getBook(id: string): Promise<Book> {
+    const book = await this.bookModel.findById(id);
+
+    if (!book) throw new Error('Not found book');
+    return book;
   }
 
   async getAllBooks() {

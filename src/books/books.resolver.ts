@@ -10,7 +10,7 @@ export class BooksResolver {
     private openBDService: OpenBDService,
   ) {}
 
-  @Query(() => Book)
+  @Query(() => Book, {nullable: false})
   async book(@Args('id', {type: () => ID}) id: string) {
     return this.bookService.getBook(id);
   }
