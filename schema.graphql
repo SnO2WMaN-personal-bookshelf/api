@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  id: ID!
+  title: String!
+  isbn: String
+  cover: String
+}
+
+type BookshelfRecord {
+  id: ID!
+  book: Book!
+}
+
+type Bookshelf {
+  id: ID!
+  recordsConnection(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+    orderBy: BookshelfRecordOrderByInput
+  ): BookshelfRecordConnection!
+}
+
+input BookshelfRecordOrderByInput {
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+enum OrderByDirection {
+  ASC
+  DESC
+}
+
+type BookshelfRecordAggregate {
+  count: Int!
+}
+
+type BookshelfRecordPageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type BookshelfRecordEdgeType {
+  node: BookshelfRecord!
+
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+type BookshelfRecordConnection {
+  aggregate: BookshelfRecordAggregate!
+  pageInfo: BookshelfRecordPageInfo!
+  edges: [BookshelfRecordEdgeType!]!
+}
+
+type User {
+  id: ID!
+  auth0Sub: String!
+  name: String!
+  displayName: String!
+  picture: String!
+  readBooks: Bookshelf!
+  readingBooks: Bookshelf!
+  wishBooks: Bookshelf!
+}
+
+type Query {
+  book(id: ID!): Book!
+  allBooks: [Book!]!
+  bookshelfRecord(id: ID!): BookshelfRecord
+  bookshelf(id: ID!): Bookshelf
+  user(name: String, id: ID): User
+  currentUser: User!
+  allUsers: [User!]!
+}
+
+type Mutation {
+  createBookshelfRecord(data: CreateBookshelfRecordInput!): BookshelfRecord!
+}
+
+input CreateBookshelfRecordInput {
+  bookshelf: ID!
+  book: ID!
+}
