@@ -25,11 +25,11 @@ export class BookshelvesResolver {
     @Args({type: () => BookshelfRecordConnectionArgs})
     connectionArgs: BookshelfRecordConnectionArgs,
   ) {
-    const {orderBy: order, ...args} = connectionArgs;
+    const {orderBy: order} = connectionArgs;
     return this.bookshelfRecordService.findAndPaginate(
       {bookshelf: {id: bookshelf.id}},
       order,
-      args,
+      connectionArgs,
     );
   }
 }

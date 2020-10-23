@@ -1,9 +1,12 @@
-import {ArgsType, Field} from '@nestjs/graphql';
-import {ConnectionArgs} from '../../bookshelf-records/bookshelf-records.service';
-import {BookshelfRecordOrderByInput} from '../../bookshelf-records/graphql-types/order-by-input.types';
+import {ArgsType, Field, InputType} from '@nestjs/graphql';
+import {BaseConnectionArgs} from '../../paginate/argstype/base-connection.argstype';
+import {OrderByDateInput} from '../../paginate/dto/order-by-date.input';
+
+@InputType()
+export class BookshelfRecordOrderByInput extends OrderByDateInput {}
 
 @ArgsType()
-export class BookshelfRecordConnectionArgs extends ConnectionArgs {
+export class BookshelfRecordConnectionArgs extends BaseConnectionArgs {
   @Field((_type) => BookshelfRecordOrderByInput, {nullable: true})
   orderBy?: BookshelfRecordOrderByInput;
 }

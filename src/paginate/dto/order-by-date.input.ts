@@ -1,8 +1,8 @@
 import {Field, InputType} from '@nestjs/graphql';
-import {OrderByDirection} from '../../paginate/order-by-direction';
+import {OrderByDirection} from '../enum/order-by-direction.enum';
 
 @InputType()
-export class BookshelfRecordOrderByInput {
+export abstract class OrderByDateInput {
   @Field((_type) => OrderByDirection, {nullable: true})
   createdAt?: OrderByDirection;
 
