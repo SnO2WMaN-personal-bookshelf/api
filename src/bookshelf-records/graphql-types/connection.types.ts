@@ -1,5 +1,5 @@
 import {Field, ObjectType} from '@nestjs/graphql';
-import {PageInfo} from '../../paginate/paginate.entities';
+import {PageInfo} from '../../paginate/entity/pageinfo.entity';
 import {AggregateBookshelfRecord} from './aggregate.types';
 import {BookshelfRecordEdgeType} from './edge.types';
 
