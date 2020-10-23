@@ -12,6 +12,12 @@
   },
   "overrides": [
     {
+      "files": ["*.entity.ts"],
+      "rules": {
+        "import/no-cycle": [0]
+      }
+    },
+    {
       "files": ["*.module.ts"],
       "rules": {
         "@typescript-eslint/no-extraneous-class": [0]
