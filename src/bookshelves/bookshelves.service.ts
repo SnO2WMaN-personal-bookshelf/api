@@ -11,9 +11,9 @@ export class BookshelvesService {
   ) {}
 
   async getBookshelf(id: string): Promise<Bookshelf | null> {
-    return this.bookshelvesRepository
-      .findOne(id)
-      .then((bookshelf) => bookshelf || null);
+    return this.bookshelvesRepository.findOneOrFail(id, {
+      relations: ['records'],
+    });
   }
 
   async addBooksToBookshelf(

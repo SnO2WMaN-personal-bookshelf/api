@@ -14,11 +14,10 @@ import {
 import {decode, encode} from 'js-base64';
 import {BooksService} from '../books/books.service';
 import {Book} from '../books/schema/book.schema';
-import {
-  FETCH_DEFAULT,
-  PaginateArgsType,
-} from '../common/paginate/paginate.argstype';
-import {PageInfo} from '../common/paginate/paginate.entities';
+import {BookshelfRecordsService} from '../bookshelf-records/bookshelf-records.service';
+import {BookshelfRecord} from '../bookshelf-records/entity/bookshelf-record.entity';
+import {FETCH_DEFAULT, PaginateArgsType} from '../paginate/paginate.argstype';
+import {PageInfo} from '../paginate/paginate.entities';
 import {BookshelvesService} from './bookshelves.service';
 import {Bookshelf} from './entity/bookshelf.entity';
 
@@ -46,10 +45,35 @@ export abstract class PaginatedBook {
   totalItems!: number;
 }
 
+@ObjectType()
+export class AggregateBookshelfRecord {
+  @Field((type) => Int)
+  count!: number;
+}
+
+@ObjectType()
+export class BookshelfRecordEdgeType {
+  @Field((type) => String)
+  cursor!: string;
+
+  @Field((type) => BookshelfRecord)
+  node!: BookshelfRecord;
+}
+
+@ObjectType()
+export class BookshelfRecordConnection {
+  @Field((type) => PageInfo)
+  pageInfo!: PageInfo;
+
+  @Field((type) => [BookshelfRecordEdgeType], {nullable: true})
+  edges!: BookshelfRecordEdgeType[];
+}
+
 @Resolver(() => Bookshelf)
 export class BookshelvesResolver {
   constructor(
     private bookshelvesService: BookshelvesService,
+    private bookshelfRecordService: BookshelfRecordsService,
     private booksService: BooksService,
   ) {}
 
@@ -89,8 +113,8 @@ export class BookshelvesResolver {
     const pageInfo: PageInfo = {
       hasPreviousPage,
       hasNextPage,
-      startCursor: edges.length ? edges[0].cursor : undefined,
-      endCursor: edges.length ? edges[edges.length - 1].cursor : undefined,
+      startCursor: edges.length ? edges[0].cursor : null,
+      endCursor: edges.length ? edges[edges.length - 1].cursor : null,
     };
 
     return {
@@ -98,6 +122,34 @@ export class BookshelvesResolver {
       edges,
       nodes,
       totalItems: bookshelf.bookIDs.length,
+    };
+  }
+
+  @ResolveField((of) => BookshelfRecordConnection)
+  async recordsConnection(
+    @Parent()
+    bookshelf: Bookshelf,
+
+    @Args({type: () => PaginateArgsType})
+    {after: afterEncoded, first}: PaginateArgsType,
+  ): Promise<BookshelfRecordConnection> {
+    const edges = await Promise.all(
+      bookshelf.records.map(async ({id}) => ({
+        cursor: encode(id),
+        node: await this.bookshelfRecordService.findOne(id),
+      })),
+    );
+
+    const pageInfo: PageInfo = {
+      hasPreviousPage: false,
+      hasNextPage: false,
+      startCursor: edges.length ? edges[0].cursor : null,
+      endCursor: edges.length ? edges[edges.length - 1].cursor : null,
+    };
+
+    return {
+      edges,
+      pageInfo,
     };
   }
 

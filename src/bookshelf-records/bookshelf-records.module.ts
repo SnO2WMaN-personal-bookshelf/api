@@ -12,5 +12,6 @@ import {BookshelfRecord} from './entity/bookshelf-record.entity';
     BooksModule,
   ],
   providers: [BookshelfRecordsResolver, BookshelfRecordsService],
+  exports: [BookshelfRecordsResolver, BookshelfRecordsService],
 })
 export class BookshelfRecordsModule {}
