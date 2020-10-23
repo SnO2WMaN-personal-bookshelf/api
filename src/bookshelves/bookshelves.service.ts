@@ -10,26 +10,9 @@ export class BookshelvesService {
     private bookshelvesRepository: Repository<Bookshelf>,
   ) {}
 
-  async getBookshelf(id: string): Promise<Bookshelf | null> {
+  async getBookshelf(id: string) {
     return this.bookshelvesRepository.findOneOrFail(id, {
       relations: ['records'],
     });
-  }
-
-  async addBooksToBookshelf(
-    bookshelfId: string,
-    books: string[],
-  ): Promise<Bookshelf | null> {
-    const bookshelf = await this.getBookshelf(bookshelfId);
-    if (bookshelf) {
-      bookshelf.bookIDs.push(...books);
-      bookshelf.bookIDs = [...new Set(bookshelf.bookIDs)];
-      return this.bookshelvesRepository.save(bookshelf);
-    }
-    return null;
-  }
-
-  async addBookToBookshelf(bookshelfId: string, bookId: string) {
-    return this.addBooksToBookshelf(bookshelfId, [bookId]);
   }
 }

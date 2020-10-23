@@ -10,6 +10,7 @@ import {
 import {BooksService} from '../books/books.service';
 import {Book} from '../books/schema/book.schema';
 import {BookshelfRecordsService} from './bookshelf-records.service';
+import {CreateBookshelfRecordInput} from './dto/create-bookshelf-record.input';
 import {BookshelfRecord} from './entity/bookshelf-record.entity';
 
 @Resolver(() => BookshelfRecord)
@@ -26,13 +27,12 @@ export class BookshelfRecordsResolver {
 
   @ResolveField((of) => Book, {nullable: false})
   async book(@Parent() {book}: BookshelfRecord) {
-    return this.booksService.getBook(book).catch(() => new Error());
+    return this.booksService.getBook(book);
   }
 
   @Mutation((returns) => BookshelfRecord)
-  async registerBookToBookshelf(
-    @Args('bookshelf', {type: () => ID}) bookshelf: string,
-    @Args('book', {type: () => ID}) book: string,
+  async createBookshelfRecord(
+    @Args('data') {book, bookshelf}: CreateBookshelfRecordInput,
   ) {
     return this.bookshelfRecordService.create(bookshelf, book);
   }
