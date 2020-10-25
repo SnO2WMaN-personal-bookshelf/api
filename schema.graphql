@@ -16,6 +16,7 @@ type BookshelfRecord {
 
 type Bookshelf {
   id: ID!
+  total: Int!
   recordsConnection(
     """Paginate before opaque cursor"""
     before: String
