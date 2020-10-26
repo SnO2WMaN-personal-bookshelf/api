@@ -15,6 +15,11 @@ export class BooksResolver {
     return this.bookService.getBook(id);
   }
 
+  @ResolveField(() => ID)
+  id(@Parent() book: Book): string {
+    return book._id;
+  }
+
   @ResolveField((of) => String, {nullable: true})
   async cover(@Parent() {isbn}: Book): Promise<string | null> {
     return isbn ? this.openBDService.getCover(isbn) : null;

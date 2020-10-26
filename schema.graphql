@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Book {
-  id: ID!
   title: String!
   isbn: String
+  id: ID!
   cover: String
 }
 
@@ -67,6 +67,22 @@ type BookshelfRecordConnection {
   edges: [BookshelfRecordEdgeType!]!
 }
 
+type Series {
+  """タイトル"""
+  title: String!
+
+  """完結しているか"""
+  concluded: Boolean!
+  id: ID!
+  books(order: OrderByDirection): [SerialSeriesRecord!]!
+  relatedBooks: [Book!]!
+}
+
+type SerialSeriesRecord {
+  serial: Float!
+  book: Book!
+}
+
 type User {
   id: ID!
   auth0Sub: String!
@@ -83,6 +99,7 @@ type Query {
   allBooks: [Book!]!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf
+  series(id: ID!): Series!
   user(name: String, id: ID): User
   currentUser: User!
   allUsers: [User!]!
