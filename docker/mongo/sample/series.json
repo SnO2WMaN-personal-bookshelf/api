@@ -1,0 +1,114 @@
+[
+  {
+    "_id": {
+      "$oid": "5f9583c7bfa19b41dc9009d0"
+    },
+    "title": "よふかしのうた",
+    "books": [
+      {
+        "book": {
+          "$oid": "5f7a6ef4655dfa235da8dbb7"
+        },
+        "serial": 1
+      },
+      {
+        "book": {
+          "$oid": "5f7a6ef4655dfa235da8dbb6"
+        },
+        "serial": 2
+      },
+      {
+        "book": {
+          "$oid": "5f7a6ef4655dfa235da8dbb8"
+        },
+        "serial": 3
+      },
+      {
+        "book": {
+          "$oid": "5f7a6ef4655dfa235da8dbb9"
+        },
+        "serial": 4
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "5f9583c7bfa19b41dc9009d1"
+    },
+    "title": "だがしかし",
+    "concluded": true,
+    "books": [
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e10"
+        },
+        "serial": 1
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e09"
+        },
+        "serial": 2
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e0b"
+        },
+        "serial": 3
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e08"
+        },
+        "serial": 4
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e07"
+        },
+        "serial": 5
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e05"
+        },
+        "serial": 6
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e0a"
+        },
+        "serial": 7
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e0c"
+        },
+        "serial": 8
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e12"
+        },
+        "serial": 9
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e0e"
+        },
+        "serial": 10
+      },
+      {
+        "book": {
+          "$oid": "5f7ed239f1db3e1abfec3e0d"
+        },
+        "serial": 11
+      }
+    ],
+    "relatedBooks": [
+      {
+        "$oid": "5f7ed239f1db3e1abfec3e0f"
+      }
+    ]
+  }
+]
