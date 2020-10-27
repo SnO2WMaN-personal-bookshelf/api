@@ -12,5 +12,11 @@ export class Book extends Document {
   @Prop({required: false})
   @Field(() => String, {nullable: true})
   isbn?: string;
+
+  @Prop({required: true})
+  authors!: {
+    author: string;
+    roles: string[];
+  }[];
 }
 export const BookSchema = SchemaFactory.createForClass(Book);
