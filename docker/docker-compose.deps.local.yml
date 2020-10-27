@@ -10,7 +10,7 @@ services:
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - ./mongo/initdb:/docker-entrypoint-initdb.d
-      - ./mongo/sample:/sample
+      - ./mongo/sample/output:/sample
     networks:
       - mypcdb-local-network
   postgresql:
