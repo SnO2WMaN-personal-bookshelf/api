@@ -1,0 +1,3 @@
+[submodule "docker/mongo/sample"]
+	path = docker/mongo/sample
+	url = git@github.com:SnO2WMaN-HQ/my-personal-comic-db-sample-data.git
