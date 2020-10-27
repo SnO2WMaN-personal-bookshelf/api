@@ -1,6 +1,6 @@
 import {Field, ObjectType} from '@nestjs/graphql';
 import {Book} from '../../books/schema/book.schema';
-import {ConnectionType} from '../../paginate/graphql-types/factory.types';
+import {Paginated} from '../../paginate/paginated.types';
 
 @ObjectType()
 export class SerialSeriesRecord {
@@ -12,6 +12,6 @@ export class SerialSeriesRecord {
 }
 
 @ObjectType()
-export class SerialSeriesRecordConnection extends ConnectionType(
+export class SerialSeriesRecordConnection extends Paginated(
   SerialSeriesRecord,
 ) {}

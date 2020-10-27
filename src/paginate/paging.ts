@@ -1,13 +1,12 @@
 import * as Relay from 'graphql-relay';
-import {FindManyOptions, Repository} from 'typeorm';
-import {BaseConnectionArgs} from './argstype/base-connection.argstype';
+import {PaginationRequiredArgs} from './argstype/pagination-required.argstype';
 
 export type PagingMeta =
   | {pagingType: 'forward'; after?: string; first: number}
   | {pagingType: 'backward'; before?: string; last: number}
   | {pagingType: 'none'};
 
-function getMeta(args: BaseConnectionArgs): PagingMeta {
+function getMeta(args: PaginationRequiredArgs): PagingMeta {
   const {first = 0, last = 0, after, before} = args;
 
   if (Boolean(first) || Boolean(after))
@@ -17,7 +16,7 @@ function getMeta(args: BaseConnectionArgs): PagingMeta {
   else return {pagingType: 'none'};
 }
 
-export function getPagingParameters(args: BaseConnectionArgs) {
+export function getPagingParameters(args: PaginationRequiredArgs) {
   const meta = getMeta(args);
 
   switch (meta.pagingType) {
@@ -44,21 +43,4 @@ export function getPagingParameters(args: BaseConnectionArgs) {
     default:
       return {};
   }
-}
-
-export async function findAndPaginate<T>(
-  condition: Pick<FindManyOptions<T>, 'where' | 'order'>,
-  connArgs: BaseConnectionArgs,
-  repository: Repository<T>,
-) {
-  const {limit: take, offset: skip} = getPagingParameters(connArgs);
-  const [entities, count] = await repository.findAndCount({
-    ...condition,
-    skip,
-    take,
-  });
-  return Relay.connectionFromArraySlice(entities, connArgs, {
-    arrayLength: count,
-    sliceStart: skip || 0,
-  });
 }

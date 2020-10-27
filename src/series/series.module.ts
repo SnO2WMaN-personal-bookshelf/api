@@ -1,7 +1,7 @@
 import {Module} from '@nestjs/common';
 import {MongooseModule} from '@nestjs/mongoose';
 import {BooksModule} from '../books/books.module';
-import {Series, SeriesSchema} from './schema/series.schema';
+import {Series, SeriesSchema} from './entity/series.entity';
 import {SeriesRecordResolver, SeriesResolver} from './series.resolver';
 import {SeriesService} from './series.service';
 

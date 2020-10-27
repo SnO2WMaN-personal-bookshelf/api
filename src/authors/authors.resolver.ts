@@ -1,9 +1,8 @@
 import {Args, ID, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {BookConnection} from '../books/graphql-types/paginate.types';
-import {SeriesConnection} from '../series/schema/series.schema';
+import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
+import {SeriesConnection} from '../series/entity/series.entity';
 import {AuthorsService} from './authors.service';
-import {AuthorBooksConnectionArgs} from './dto/books.args';
-import {AuthorSeriesConnectionArgs} from './dto/series.args';
 import {Author} from './entity/author.entity';
 
 @Resolver(() => Author)
@@ -24,8 +23,8 @@ export class AuthorsResolver {
   async books(
     @Parent() author: Author,
 
-    @Args({type: () => AuthorBooksConnectionArgs})
-    connectionArgs: AuthorBooksConnectionArgs,
+    @Args({type: () => PaginationRequiredArgs})
+    connectionArgs: PaginationRequiredArgs,
   ) {
     return this.authorsService.books(author, connectionArgs);
   }
@@ -34,8 +33,8 @@ export class AuthorsResolver {
   async series(
     @Parent() author: Author,
 
-    @Args({type: () => AuthorSeriesConnectionArgs})
-    connectionArgs: AuthorSeriesConnectionArgs,
+    @Args({type: () => PaginationRequiredArgs})
+    connectionArgs: PaginationRequiredArgs,
   ) {
     return this.authorsService.series(author, connectionArgs);
   }

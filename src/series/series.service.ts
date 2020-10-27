@@ -3,10 +3,10 @@ import {InjectModel} from '@nestjs/mongoose';
 import * as Relay from 'graphql-relay';
 import {ObjectId} from 'mongodb';
 import {Model} from 'mongoose';
-import {BaseConnectionArgs} from '../paginate/argstype/base-connection.argstype';
+import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
 import {getPagingParameters} from '../paginate/paging';
-import {Series} from './schema/series.schema';
+import {Series} from './entity/series.entity';
 
 @Injectable()
 export class SeriesService {
@@ -23,7 +23,7 @@ export class SeriesService {
 
   async getBooks(
     series: Series,
-    connectionArgs: BaseConnectionArgs,
+    connectionArgs: PaginationRequiredArgs,
     order: OrderByDirection,
   ) {
     const {limit, offset: skip} = getPagingParameters(connectionArgs);
@@ -99,7 +99,10 @@ export class SeriesService {
     };
   }
 
-  async getRelatedBooks(series: Series, connectionArgs: BaseConnectionArgs) {
+  async getRelatedBooks(
+    series: Series,
+    connectionArgs: PaginationRequiredArgs,
+  ) {
     const {limit, offset: skip} = getPagingParameters(connectionArgs);
 
     const count: number = await this.seriesModel

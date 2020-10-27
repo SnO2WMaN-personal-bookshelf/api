@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import {Bookshelf} from '../../bookshelves/entity/bookshelf.entity';
+import {Paginated} from '../../paginate/paginated.types';
 
 @Entity()
 @ObjectType()
@@ -30,3 +31,6 @@ export class BookshelfRecord {
   @Column({nullable: false})
   book!: string;
 }
+
+@ObjectType()
+export class BookshelfRecordConnection extends Paginated(BookshelfRecord) {}

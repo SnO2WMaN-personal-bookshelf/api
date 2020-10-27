@@ -10,7 +10,7 @@ import {
 } from '@nestjs/graphql';
 import {Author} from '../authors/entity/author.entity';
 import {OpenBDService} from '../openbd/openbd.service';
-import {Series} from '../series/schema/series.schema';
+import {Series} from '../series/entity/series.entity';
 import {BooksService} from './books.service';
 import {Book} from './schema/book.schema';
 

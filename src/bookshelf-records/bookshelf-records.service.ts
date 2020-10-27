@@ -3,8 +3,8 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {FindManyOptions, Repository} from 'typeorm';
 import {BooksService} from '../books/books.service';
 import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
-import {BaseConnectionArgs} from '../paginate/argstype/base-connection.argstype';
-import {findAndPaginate} from '../paginate/paging';
+import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
+import {getConnectionFromTypeORMRepository} from '../paginate/typeorm';
 import {BookshelfRecord} from './entity/bookshelf-record.entity';
 
 @Injectable()
@@ -41,9 +41,9 @@ export class BookshelfRecordsService {
   async findAndPaginate(
     where: FindManyOptions<BookshelfRecord>['where'],
     order: FindManyOptions<BookshelfRecord>['order'],
-    connectionArgs: BaseConnectionArgs,
+    connectionArgs: PaginationRequiredArgs,
   ) {
-    const connection = await findAndPaginate(
+    const connection = await getConnectionFromTypeORMRepository(
       {where, order},
       connectionArgs,
       this.bookshelfRecordsRepository,

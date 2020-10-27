@@ -8,9 +8,10 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import {BookshelfRecordsService} from '../bookshelf-records/bookshelf-records.service';
-import {BookshelfRecordConnection} from '../bookshelf-records/graphql-types/connection.types';
+import {BookshelfRecordConnection} from '../bookshelf-records/entity/bookshelf-record.entity';
+import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
+import {OrderByDateInput} from '../paginate/dto/order-by-date.input';
 import {BookshelvesService} from './bookshelves.service';
-import {BookshelfRecordConnectionArgs} from './dto/record-connection.argstype';
 import {Bookshelf} from './entity/bookshelf.entity';
 
 @Resolver(() => Bookshelf)
@@ -38,10 +39,12 @@ export class BookshelvesResolver {
     @Parent()
     bookshelf: Bookshelf,
 
-    @Args({type: () => BookshelfRecordConnectionArgs})
-    connectionArgs: BookshelfRecordConnectionArgs,
+    @Args({type: () => PaginationRequiredArgs})
+    connectionArgs: PaginationRequiredArgs,
+
+    @Args('orderBy', {type: () => OrderByDateInput, nullable: true})
+    order: OrderByDateInput,
   ) {
-    const {orderBy: order} = connectionArgs;
     return this.bookshelfRecordService.findAndPaginate(
       {bookshelf: {id: bookshelf.id}},
       order,

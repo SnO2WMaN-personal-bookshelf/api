@@ -1,13 +1,13 @@
 import {Args, ID, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {Author} from '../authors/entity/author.entity';
 import {BookConnection} from '../books/graphql-types/paginate.types';
-import {BaseConnectionArgs} from '../paginate/argstype/base-connection.argstype';
+import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
 import {
   SerialSeriesRecord,
   SerialSeriesRecordConnection,
 } from './entity/serial-record.entity';
-import {Series} from './schema/series.schema';
+import {Series} from './entity/series.entity';
 import {SeriesService} from './series.service';
 
 @Resolver(() => Series)
@@ -28,8 +28,8 @@ export class SeriesResolver {
   async books(
     @Parent() series: Series,
 
-    @Args({type: () => BaseConnectionArgs})
-    connectionArgs: BaseConnectionArgs,
+    @Args({type: () => PaginationRequiredArgs})
+    connectionArgs: PaginationRequiredArgs,
 
     @Args('order', {type: () => OrderByDirection, nullable: true})
     order: OrderByDirection = OrderByDirection.ASC,
@@ -41,8 +41,8 @@ export class SeriesResolver {
   async relatedBooks(
     @Parent() series: Series,
 
-    @Args({type: () => BaseConnectionArgs})
-    connectionArgs: BaseConnectionArgs,
+    @Args({type: () => PaginationRequiredArgs})
+    connectionArgs: PaginationRequiredArgs,
   ) {
     return this.seriesService.getRelatedBooks(series, connectionArgs);
   }

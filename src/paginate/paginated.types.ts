@@ -2,7 +2,7 @@ import {Type} from '@nestjs/common';
 import {Field, Int, ObjectType} from '@nestjs/graphql';
 import * as Relay from 'graphql-relay';
 
-export function ConnectionType<T>(classRef: Type<T>): any {
+export function Paginated<T>(classRef: Type<T>): any {
   @ObjectType(`${classRef.name}Aggregate`)
   abstract class Aggregate {
     @Field((type) => Int)

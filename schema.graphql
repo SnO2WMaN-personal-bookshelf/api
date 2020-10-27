@@ -2,22 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Book {
-  title: String!
-  isbn: String
+type Author {
+  name: String!
   id: ID!
-  cover: String
-}
-
-type BookshelfRecord {
-  id: ID!
-  book: Book!
-}
-
-type Bookshelf {
-  id: ID!
-  total: Int!
-  recordsConnection(
+  books(
     """Paginate before opaque cursor"""
     before: String
 
@@ -29,18 +17,130 @@ type Bookshelf {
 
     """Paginate last"""
     last: Int
-    orderBy: BookshelfRecordOrderByInput
-  ): BookshelfRecordConnection!
+  ): BookConnection!
+  series(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): SeriesConnection!
 }
 
-input BookshelfRecordOrderByInput {
-  createdAt: OrderByDirection
-  updatedAt: OrderByDirection
+type Series {
+  """タイトル"""
+  title: String!
+
+  """完結しているか"""
+  concluded: Boolean!
+  id: ID!
+  books(
+    order: OrderByDirection
+
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): SerialSeriesRecordConnection!
+  relatedBooks(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): BookConnection!
+  relatedAuthors: [Author!]!
 }
 
 enum OrderByDirection {
   ASC
   DESC
+}
+
+type SeriesAggregate {
+  count: Int!
+}
+
+type SeriesPageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type SeriesEdgeType {
+  node: Series!
+
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+type SeriesConnection {
+  aggregate: SeriesAggregate!
+  pageInfo: SeriesPageInfo!
+  edges: [SeriesEdgeType!]!
+}
+
+type Book {
+  title: String!
+  isbn: String
+  id: ID!
+  cover: String
+  authorConnections: [BookAuthorConnection!]!
+  series: [Series!]!
+}
+
+type BookAuthorConnection {
+  roles: [String!]
+  author: Author!
+}
+
+type BookAggregate {
+  count: Int!
+}
+
+type BookPageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type BookEdgeType {
+  node: Book!
+
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+type BookConnection {
+  aggregate: BookAggregate!
+  pageInfo: BookPageInfo!
+  edges: [BookEdgeType!]!
+}
+
+type BookshelfRecord {
+  id: ID!
+  book: Book!
 }
 
 type BookshelfRecordAggregate {
@@ -67,20 +167,58 @@ type BookshelfRecordConnection {
   edges: [BookshelfRecordEdgeType!]!
 }
 
-type Series {
-  """タイトル"""
-  title: String!
-
-  """完結しているか"""
-  concluded: Boolean!
+type Bookshelf {
   id: ID!
-  books(order: OrderByDirection): [SerialSeriesRecord!]!
-  relatedBooks: [Book!]!
+  total: Int!
+  recordsConnection(
+    orderBy: OrderByDateInput
+
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): BookshelfRecordConnection!
+}
+
+input OrderByDateInput {
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
 }
 
 type SerialSeriesRecord {
   serial: Float!
   book: Book!
+}
+
+type SerialSeriesRecordAggregate {
+  count: Int!
+}
+
+type SerialSeriesRecordPageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
+
+type SerialSeriesRecordEdgeType {
+  node: SerialSeriesRecord!
+
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
+
+type SerialSeriesRecordConnection {
+  aggregate: SerialSeriesRecordAggregate!
+  pageInfo: SerialSeriesRecordPageInfo!
+  edges: [SerialSeriesRecordEdgeType!]!
 }
 
 type User {
@@ -97,6 +235,7 @@ type User {
 type Query {
   book(id: ID!): Book!
   allBooks: [Book!]!
+  author(id: ID!): Author!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf
   series(id: ID!): Series!

@@ -3,7 +3,7 @@ import {Min} from 'class-validator';
 import * as Relay from 'graphql-relay';
 
 @ArgsType()
-export class BaseConnectionArgs implements Relay.ConnectionArguments {
+export class PaginationRequiredArgs implements Relay.ConnectionArguments {
   @Field((_type) => String, {
     nullable: true,
     description: 'Paginate before opaque cursor',

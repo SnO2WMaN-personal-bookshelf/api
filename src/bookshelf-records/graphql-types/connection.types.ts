@@ -1,8 +1,6 @@
 import {ObjectType} from '@nestjs/graphql';
-import {ConnectionType} from '../../paginate/graphql-types/factory.types';
+import {Paginated} from '../../paginate/paginated.types';
 import {BookshelfRecord} from '../entity/bookshelf-record.entity';
 
 @ObjectType()
-export class BookshelfRecordConnection extends ConnectionType(
-  BookshelfRecord,
-) {}
+export class BookshelfRecordConnection extends Paginated(BookshelfRecord) {}
