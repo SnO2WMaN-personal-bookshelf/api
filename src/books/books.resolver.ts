@@ -10,6 +10,7 @@ import {
 } from '@nestjs/graphql';
 import {Author} from '../authors/entity/author.entity';
 import {OpenBDService} from '../openbd/openbd.service';
+import {Series} from '../series/schema/series.schema';
 import {BooksService} from './books.service';
 import {Book} from './schema/book.schema';
 
@@ -43,6 +44,11 @@ export class BooksResolver {
   @ResolveField((of) => [BookAuthorConnection])
   async authorConnections(@Parent() book: Book) {
     return this.bookService.getAuthors(book);
+  }
+
+  @ResolveField((of) => [Series])
+  async series(@Parent() book: Book) {
+    return this.bookService.getSeries(book);
   }
 }
 

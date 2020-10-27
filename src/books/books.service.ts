@@ -58,4 +58,48 @@ export class BooksService {
       },
     ]);
   }
+
+  async getSeries(book: Book) {
+    return this.bookModel.aggregate([
+      {
+        $match: {
+          _id: new ObjectId(book._id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'series',
+          foreignField: 'books.book',
+          localField: '_id',
+          as: 'series',
+        },
+      },
+      {
+        $lookup: {
+          from: 'series',
+          foreignField: 'relatedBooks',
+          localField: '_id',
+          as: 'relatedBooks',
+        },
+      },
+      {
+        $project: {
+          series: {
+            $concatArrays: ['$series', '$relatedBooks'],
+          },
+        },
+      },
+      {
+        $unwind: {
+          path: '$series',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: '$series',
+        },
+      },
+    ]);
+  }
 }
