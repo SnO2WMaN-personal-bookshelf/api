@@ -6,6 +6,7 @@ import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {AuthModule} from './auth/auth.module';
 import {Auth0Module} from './auth0/auth0.module';
+import {AuthorsModule} from './authors/authors.module';
 import {BooksModule} from './books/books.module';
 import {BookshelfRecordsModule} from './bookshelf-records/bookshelf-records.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
@@ -37,6 +38,7 @@ import {UsersModule} from './users/users.module';
     BooksModule,
     BookshelvesModule,
     BookshelfRecordsModule,
+    AuthorsModule,
     SeriesModule,
     AuthModule,
     Auth0Module,
