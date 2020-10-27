@@ -1,16 +1,12 @@
-import {
-  Args,
-  Field,
-  ID,
-  ObjectType,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import {Args, ID, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {Author} from '../authors/entity/author.entity';
-import {Book} from '../books/schema/book.schema';
+import {BookConnection} from '../books/graphql-types/paginate.types';
+import {BaseConnectionArgs} from '../paginate/argstype/base-connection.argstype';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
+import {
+  SerialSeriesRecord,
+  SerialSeriesRecordConnection,
+} from './entity/serial-record.entity';
 import {Series} from './schema/series.schema';
 import {SeriesService} from './series.service';
 
@@ -28,33 +24,33 @@ export class SeriesResolver {
     return series._id;
   }
 
-  @ResolveField(() => [SerialSeriesRecord])
+  @ResolveField(() => SerialSeriesRecordConnection)
   async books(
     @Parent() series: Series,
+
+    @Args({type: () => BaseConnectionArgs})
+    connectionArgs: BaseConnectionArgs,
+
     @Args('order', {type: () => OrderByDirection, nullable: true})
     order: OrderByDirection = OrderByDirection.ASC,
   ) {
-    return this.seriesService.getBooks(series, order);
+    return this.seriesService.getBooks(series, connectionArgs, order);
   }
 
-  @ResolveField(() => [Book])
-  async relatedBooks(@Parent() series: Series) {
-    return this.seriesService.getRelatedBooks(series);
+  @ResolveField(() => BookConnection)
+  async relatedBooks(
+    @Parent() series: Series,
+
+    @Args({type: () => BaseConnectionArgs})
+    connectionArgs: BaseConnectionArgs,
+  ) {
+    return this.seriesService.getRelatedBooks(series, connectionArgs);
   }
 
   @ResolveField(() => [Author])
   async relatedAuthors(@Parent() series: Series) {
     return this.seriesService.getRelatedAuthors(series);
   }
-}
-
-@ObjectType()
-export class SerialSeriesRecord {
-  @Field(() => Number)
-  serial!: number;
-
-  @Field(() => Book)
-  book!: string;
 }
 
 @Resolver(() => SerialSeriesRecord)

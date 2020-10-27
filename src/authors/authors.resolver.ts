@@ -1,6 +1,6 @@
 import {Args, ID, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {BookConnection} from '../books/graphql-types/paginate.types';
-import {SeriesConnection} from '../series/graphql-types/paginate.types';
+import {SeriesConnection} from '../series/schema/series.schema';
 import {AuthorsService} from './authors.service';
 import {AuthorBooksConnectionArgs} from './dto/books.args';
 import {AuthorSeriesConnectionArgs} from './dto/series.args';

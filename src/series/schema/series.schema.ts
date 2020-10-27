@@ -2,6 +2,7 @@ import {Field, ObjectType} from '@nestjs/graphql';
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {ObjectId} from 'mongodb';
 import {Document} from 'mongoose';
+import {ConnectionType} from '../../paginate/graphql-types/factory.types';
 
 @Schema()
 @ObjectType()
@@ -27,3 +28,6 @@ export class Series extends Document {
   relatedAuthors!: ObjectId[];
 }
 export const SeriesSchema = SchemaFactory.createForClass(Series);
+
+@ObjectType()
+export class SeriesConnection extends ConnectionType(Series) {}
