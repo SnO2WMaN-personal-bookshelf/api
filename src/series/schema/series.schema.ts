@@ -1,5 +1,6 @@
 import {Field, ObjectType} from '@nestjs/graphql';
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {ObjectId} from 'mongodb';
 import {Document} from 'mongoose';
 
 @Schema()
@@ -21,5 +22,8 @@ export class Series extends Document {
   @Prop({default: false})
   @Field({description: '完結しているか'})
   concluded?: boolean;
+
+  @Prop({default: [], required: true})
+  relatedAuthors!: ObjectId[];
 }
 export const SeriesSchema = SchemaFactory.createForClass(Series);

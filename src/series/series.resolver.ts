@@ -8,6 +8,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import {Author} from '../authors/entity/author.entity';
 import {Book} from '../books/schema/book.schema';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
 import {Series} from './schema/series.schema';
@@ -39,6 +40,11 @@ export class SeriesResolver {
   @ResolveField(() => [Book])
   async relatedBooks(@Parent() series: Series) {
     return this.seriesService.getRelatedBooks(series);
+  }
+
+  @ResolveField(() => [Author])
+  async relatedAuthors(@Parent() series: Series) {
+    return this.seriesService.getRelatedAuthors(series);
   }
 }
 

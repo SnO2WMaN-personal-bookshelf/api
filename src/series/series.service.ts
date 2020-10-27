@@ -86,4 +86,32 @@ export class SeriesService {
       },
     ]);
   }
+
+  async getRelatedAuthors(series: Series) {
+    return this.seriesModel.aggregate([
+      {
+        $match: {
+          _id: new ObjectId(series._id),
+        },
+      },
+      {
+        $lookup: {
+          from: 'authors',
+          foreignField: '_id',
+          localField: 'relatedAuthors',
+          as: 'relatedAuthors',
+        },
+      },
+      {
+        $unwind: {
+          path: '$relatedAuthors',
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: '$relatedAuthors',
+        },
+      },
+    ]);
+  }
 }
