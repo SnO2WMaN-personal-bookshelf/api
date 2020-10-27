@@ -2,18 +2,14 @@ import {Type} from '@nestjs/common';
 import {Field, Int, ObjectType} from '@nestjs/graphql';
 import * as Relay from 'graphql-relay';
 
-export function AggregateType<T>(classRef: Type<T>): any {
-  @ObjectType(`${classRef.name}Aggregate`, {isAbstract: true})
+export function ConnectionType<T>(classRef: Type<T>): any {
+  @ObjectType(`${classRef.name}Aggregate`)
   abstract class Aggregate {
     @Field((type) => Int)
     count!: number;
   }
 
-  return Aggregate;
-}
-
-export function PageInfoType<T>(classRef: Type<T>): any {
-  @ObjectType(`${classRef.name}PageInfo`, {isAbstract: true})
+  @ObjectType(`${classRef.name}PageInfo`)
   abstract class PageInfo implements Relay.PageInfo {
     @Field((_type) => Boolean, {nullable: true})
     hasNextPage?: boolean | null;
@@ -28,11 +24,7 @@ export function PageInfoType<T>(classRef: Type<T>): any {
     endCursor?: Relay.ConnectionCursor | null;
   }
 
-  return PageInfo;
-}
-
-export function EdgeType<T>(classRef: Type<T>): any {
-  @ObjectType(`${classRef.name}EdgeType`, {isAbstract: true})
+  @ObjectType(`${classRef.name}EdgeType`)
   abstract class Edge implements Relay.Edge<T> {
     @Field(() => classRef)
     node!: T;
@@ -43,17 +35,10 @@ export function EdgeType<T>(classRef: Type<T>): any {
     cursor!: Relay.ConnectionCursor;
   }
 
-  return Edge;
-}
-
-export function ConnectionType<T>(
-  classRef: Type<T>,
-  {Edge, Aggregate, PageInfo}: {Edge: any; Aggregate: any; PageInfo: any},
-): any {
   @ObjectType(`${classRef.name}Connection`, {isAbstract: true})
   abstract class Connection implements Relay.Connection<T> {
     @Field(() => Aggregate)
-    aggregate!: typeof Aggregate;
+    aggregate!: Aggregate;
 
     @Field(() => PageInfo)
     pageInfo!: Relay.PageInfo;
