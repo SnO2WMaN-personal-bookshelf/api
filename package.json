@@ -4,9 +4,9 @@
   "scripts": {
     "prebuild": "run-s clean",
     "build": "nest build",
+    "dev": "nest start --watch",
+    "debug": "nest start --watch --debug ",
     "start": "nest start",
-    "start:debug": "nest start --debug --watch",
-    "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
     "test": "jest",
     "test:cov": "jest --coverage",
