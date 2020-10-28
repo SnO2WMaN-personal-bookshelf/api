@@ -46,9 +46,9 @@ export class UsersService {
     name: string;
     displayName: string;
   }) {
-    const readBooks = this.bookshelvesRepository.create({bookIDs: []});
-    const readingBooks = this.bookshelvesRepository.create({bookIDs: []});
-    const wishBooks = this.bookshelvesRepository.create({bookIDs: []});
+    const readBooks = this.bookshelvesRepository.create({});
+    const readingBooks = this.bookshelvesRepository.create({});
+    const wishBooks = this.bookshelvesRepository.create({});
 
     const newUser = await this.usersRepository.create({
       readBooks,
