@@ -14,6 +14,11 @@ export class AuthorsResolver {
     return this.authorsService.getById(id);
   }
 
+  @Query(() => [Author])
+  async allAuthors() {
+    return this.authorsService.all();
+  }
+
   @ResolveField(() => ID)
   async id(@Parent() author: Author): Promise<string> {
     return author._id;

@@ -20,6 +20,10 @@ export class AuthorsService {
     return book;
   }
 
+  async all() {
+    return this.authorsModel.find();
+  }
+
   async books(author: Author, args: PaginationRequiredArgs) {
     return getConnectionFromMongooseModel(
       [

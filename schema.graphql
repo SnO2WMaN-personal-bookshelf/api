@@ -236,9 +236,11 @@ type Query {
   book(id: ID!): Book!
   allBooks: [Book!]!
   author(id: ID!): Author!
+  allAuthors: [Author!]!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf
   series(id: ID!): Series!
+  allSeries: [Series!]!
   user(name: String, id: ID): User
   currentUser: User!
   allUsers: [User!]!

@@ -20,6 +20,10 @@ export class SeriesService {
     return series;
   }
 
+  async all() {
+    return this.seriesModel.find();
+  }
+
   async books(
     series: Series,
     connectionArgs: PaginationRequiredArgs,

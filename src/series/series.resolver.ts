@@ -19,6 +19,11 @@ export class SeriesResolver {
     return this.seriesService.findById(id);
   }
 
+  @Query(() => [Series])
+  async allSeries() {
+    return this.seriesService.all();
+  }
+
   @ResolveField(() => ID)
   id(@Parent() series: Series): string {
     return series._id;
