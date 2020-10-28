@@ -43,12 +43,12 @@ export class BooksResolver {
 
   @ResolveField((of) => [BookAuthorConnection])
   async authorConnections(@Parent() book: Book) {
-    return this.bookService.getAuthors(book);
+    return this.bookService.authors(book);
   }
 
   @ResolveField((of) => [Series])
   async series(@Parent() book: Book) {
-    return this.bookService.getSeries(book);
+    return this.bookService.series(book);
   }
 }
 

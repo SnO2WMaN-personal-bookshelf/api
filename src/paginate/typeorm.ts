@@ -9,13 +9,25 @@ export async function getConnectionFromTypeORMRepository<T>(
   repository: Repository<T>,
 ) {
   const {limit: take, offset: skip} = getPagingParameters(connArgs);
-  const [entities, count] = await repository.findAndCount({
-    ...condition,
-    skip,
-    take,
-  });
-  return Relay.connectionFromArraySlice(entities, connArgs, {
-    arrayLength: count,
-    sliceStart: skip || 0,
-  });
+  const connection = await repository
+    .findAndCount({
+      ...condition,
+      skip,
+      take,
+    })
+    .then(([entities, count]) =>
+      Relay.connectionFromArraySlice(entities, connArgs, {
+        arrayLength: count,
+        sliceStart: skip || 0,
+      }),
+    );
+
+  const count = await repository.count({...condition});
+
+  return {
+    ...connection,
+    aggregate: {
+      count,
+    },
+  };
 }

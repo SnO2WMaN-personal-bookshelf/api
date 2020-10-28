@@ -34,7 +34,7 @@ export class SeriesResolver {
     @Args('order', {type: () => OrderByDirection, nullable: true})
     order: OrderByDirection = OrderByDirection.ASC,
   ) {
-    return this.seriesService.getBooks(series, connectionArgs, order);
+    return this.seriesService.books(series, connectionArgs, order);
   }
 
   @ResolveField(() => BookConnection)
@@ -44,12 +44,12 @@ export class SeriesResolver {
     @Args({type: () => PaginationRequiredArgs})
     connectionArgs: PaginationRequiredArgs,
   ) {
-    return this.seriesService.getRelatedBooks(series, connectionArgs);
+    return this.seriesService.relatedBooks(series, connectionArgs);
   }
 
   @ResolveField(() => [Author])
   async relatedAuthors(@Parent() series: Series) {
-    return this.seriesService.getRelatedAuthors(series);
+    return this.seriesService.relatedAuthors(series);
   }
 }
 

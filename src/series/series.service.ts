@@ -1,11 +1,10 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import * as Relay from 'graphql-relay';
 import {ObjectId} from 'mongodb';
 import {Model} from 'mongoose';
 import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
-import {getPagingParameters} from '../paginate/paging';
+import {getConnectionFromMongooseModel} from '../paginate/mongoose';
 import {Series} from './entity/series.entity';
 
 @Injectable()
@@ -21,15 +20,13 @@ export class SeriesService {
     return series;
   }
 
-  async getBooks(
+  async books(
     series: Series,
     connectionArgs: PaginationRequiredArgs,
     order: OrderByDirection,
   ) {
-    const {limit, offset: skip} = getPagingParameters(connectionArgs);
-
-    const count: number = await this.seriesModel
-      .aggregate([
+    return getConnectionFromMongooseModel(
+      [
         {
           $match: {
             _id: new ObjectId(series._id),
@@ -40,12 +37,7 @@ export class SeriesService {
             path: '$books',
           },
         },
-        {
-          $count: 'count',
-        },
-      ])
-      .then(([{count}]) => count);
-    const books = await this.seriesModel.aggregate(
+      ],
       [
         {
           $match: {
@@ -80,33 +72,15 @@ export class SeriesService {
             serial: order === OrderByDirection.ASC ? 1 : -1,
           },
         },
-        skip && {
-          $skip: skip,
-        },
-        limit && {
-          $limit: limit,
-        },
-      ].filter(Boolean),
+      ],
+      connectionArgs,
+      this.seriesModel,
     );
-
-    const connection = Relay.connectionFromArraySlice(books, connectionArgs, {
-      arrayLength: count,
-      sliceStart: skip || 0,
-    });
-    return {
-      ...connection,
-      aggregate: {count},
-    };
   }
 
-  async getRelatedBooks(
-    series: Series,
-    connectionArgs: PaginationRequiredArgs,
-  ) {
-    const {limit, offset: skip} = getPagingParameters(connectionArgs);
-
-    const count: number = await this.seriesModel
-      .aggregate([
+  async relatedBooks(series: Series, connectionArgs: PaginationRequiredArgs) {
+    return getConnectionFromMongooseModel(
+      [
         {
           $match: {
             _id: new ObjectId(series._id),
@@ -125,12 +99,7 @@ export class SeriesService {
             path: '$relatedBooks',
           },
         },
-        {
-          $count: 'count',
-        },
-      ])
-      .then(([{count}]) => count);
-    const aggregated = await this.seriesModel.aggregate(
+      ],
       [
         {
           $match: {
@@ -155,29 +124,13 @@ export class SeriesService {
             newRoot: '$relatedBooks',
           },
         },
-        skip && {
-          $skip: skip,
-        },
-        limit && {
-          $limit: limit,
-        },
-      ].filter(Boolean),
-    );
-    const connection = Relay.connectionFromArraySlice(
-      aggregated,
+      ],
       connectionArgs,
-      {
-        arrayLength: count,
-        sliceStart: skip || 0,
-      },
+      this.seriesModel,
     );
-    return {
-      ...connection,
-      aggregate: {count},
-    };
   }
 
-  async getRelatedAuthors(series: Series) {
+  async relatedAuthors(series: Series) {
     return this.seriesModel.aggregate([
       {
         $match: {

@@ -43,18 +43,10 @@ export class BookshelfRecordsService {
     order: FindManyOptions<BookshelfRecord>['order'],
     connectionArgs: PaginationRequiredArgs,
   ) {
-    const connection = await getConnectionFromTypeORMRepository(
+    return getConnectionFromTypeORMRepository(
       {where, order},
       connectionArgs,
       this.bookshelfRecordsRepository,
     );
-
-    const count = await this.bookshelfRecordsRepository.count({where});
-    const aggregate = {count};
-
-    return {
-      ...connection,
-      aggregate,
-    };
   }
 }

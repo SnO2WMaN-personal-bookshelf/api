@@ -26,7 +26,7 @@ export class BooksService {
     return this.bookModel.exists({_id: id});
   }
 
-  async getAuthors(book: Book) {
+  async authors(book: Book) {
     return this.bookModel.aggregate([
       {
         $match: {
@@ -59,7 +59,7 @@ export class BooksService {
     ]);
   }
 
-  async getSeries(book: Book) {
+  async series(book: Book) {
     return this.bookModel.aggregate([
       {
         $match: {
