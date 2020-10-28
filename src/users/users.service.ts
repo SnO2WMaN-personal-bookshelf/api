@@ -14,7 +14,7 @@ export class UsersService {
     private readonly bookshelvesRepository: Repository<Bookshelf>,
   ) {}
 
-  async getUser(id: string) {
+  async getUserById(id: string) {
     return this.usersRepository.findOne(id, {
       relations: ['readBooks', 'readingBooks', 'wishBooks'],
     });
@@ -26,7 +26,7 @@ export class UsersService {
         where: {name},
         select: ['id'],
       })
-      .then((user) => user && this.getUser(user.id));
+      .then((user) => user && this.getUserById(user.id));
   }
 
   async getUserFromAuth0Sub(sub: string) {
@@ -34,7 +34,7 @@ export class UsersService {
       where: {auth0Sub: sub},
       select: ['id'],
     });
-    return user && this.getUser(user.id);
+    return user && this.getUserById(user.id);
   }
 
   async createUser({
@@ -59,12 +59,6 @@ export class UsersService {
     });
     return this.usersRepository.save(newUser);
   }
-
-  /*
-  async createUser(sub: string): Promise<User | null> {
-    return this.usersRepository.create({ name});
-  }
-  */
 
   async allUsers() {
     return this.usersRepository.find();

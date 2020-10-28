@@ -1,6 +1,7 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
+import {BookshelfRecord} from '../bookshelf-records/entity/bookshelf-record.entity';
 import {BookshelvesService} from './bookshelves.service';
 import {Bookshelf} from './entity/bookshelf.entity';
 
@@ -13,6 +14,10 @@ describe('BookshelvesService', () => {
       providers: [
         {
           provide: getRepositoryToken(Bookshelf),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(BookshelfRecord),
           useClass: Repository,
         },
         BookshelvesService,

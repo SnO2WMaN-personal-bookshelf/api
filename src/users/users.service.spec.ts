@@ -1,6 +1,7 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
+import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -15,6 +16,10 @@ describe('UsersService', () => {
           provide: getRepositoryToken(User),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(Bookshelf),
+          useClass: Repository,
+        },
         UsersService,
       ],
     }).compile();
@@ -27,25 +32,23 @@ describe('UsersService', () => {
     expect(usersService).toBeDefined();
   });
 
-  describe('getUser()', () => {
+  describe('getUserById()', () => {
     it('IDに結び付けられたユーザーを取得', async () => {
       jest.spyOn(usersRepogitory, 'findOne').mockResolvedValueOnce({
         id: '1',
-        name: 'John',
-        readBooks: {id: '1', bookIDs: []},
+        name: 'john',
+        displayName: 'John',
+        auth0Sub: '',
+        picture: '',
+        readBooks: {id: '1', records: []},
+        readingBooks: {id: '2', records: []},
+        wishBooks: {id: '3', records: []},
       });
 
-      const user = await usersService.getUser('1');
+      const user = await usersService.getUserById('1');
       expect(user).toHaveProperty('id');
       expect(user).toHaveProperty('name');
       expect(user).toHaveProperty('readBooks');
-    });
-
-    it('IDに結び付けられたユーザーが存在しない場合はnullを返す', async () => {
-      jest.spyOn(usersRepogitory, 'findOne').mockResolvedValueOnce(undefined);
-
-      const user = await usersService.getUser('1');
-      expect(user).toBeNull();
     });
   });
 });

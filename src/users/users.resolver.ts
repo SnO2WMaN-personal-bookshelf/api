@@ -21,7 +21,7 @@ export class UsersResolver {
     if (name) {
       return this.usersService.getUserByName(name).then((user) => user || null);
     } else if (id) {
-      return this.usersService.getUser(id).then((user) => user || null);
+      return this.usersService.getUserById(id).then((user) => user || null);
     }
 
     return null;
@@ -44,7 +44,7 @@ export class UsersResolver {
             displayName: identify.name,
             name: identify.nickname,
           })
-          .then((newUser) => this.usersService.getUser(newUser.id));
+          .then((newUser) => this.usersService.getUserById(newUser.id));
       }
     }
     throw new ForbiddenException();

@@ -27,13 +27,13 @@ describe('BooksResolver', () => {
       ],
       providers: [
         BooksService,
-        BooksResolver,
         {
           provide: OpenBDService,
           useValue: {
             getCover: (isbn: string) => `https://cover.openbd.jp/${isbn}.jpg`,
           },
         },
+        BooksResolver,
       ],
     }).compile();
 
@@ -58,9 +58,10 @@ describe('BooksResolver', () => {
       const book = await bookModel.create({
         title: 'よふかしのうた(1)',
         isbn: '9784091294920',
+        authors: [],
       });
 
-      const actual = await bookResolver.book(book.id);
+      const actual = await bookResolver.book(book._id);
 
       expect(actual).toHaveProperty('id');
       expect(actual).toHaveProperty('title');
@@ -73,6 +74,7 @@ describe('BooksResolver', () => {
       const book = await bookModel.create({
         title: 'よふかしのうた(1)',
         isbn: '9784091294920',
+        authors: [],
       });
       const actual = await bookResolver.cover(book);
       expect(actual).toBe(`https://cover.openbd.jp/9784091294920.jpg`);
@@ -81,6 +83,7 @@ describe('BooksResolver', () => {
     it('ISBNがない場合', async () => {
       const book = await bookModel.create({
         title: 'よふかしのうた(1)',
+        authors: [],
       });
       const actual = await bookResolver.cover(book);
       expect(actual).toBeNull();
