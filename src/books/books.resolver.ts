@@ -42,7 +42,7 @@ export class BooksResolver {
   }
 
   @ResolveField((of) => [BookAuthorConnection])
-  async authorConnections(@Parent() book: Book) {
+  async authors(@Parent() book: Book) {
     return this.bookService.authors(book);
   }
 

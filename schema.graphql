@@ -105,7 +105,7 @@ type Book {
   isbn: String
   id: ID!
   cover: String
-  authorConnections: [BookAuthorConnection!]!
+  authors: [BookAuthorConnection!]!
   series: [Series!]!
 }
 
