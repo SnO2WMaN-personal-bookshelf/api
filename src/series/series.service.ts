@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {ObjectId} from 'mongodb';
 import {Model} from 'mongoose';
 import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
 import {OrderByDirection} from '../paginate/enum/order-by-direction.enum';
@@ -33,7 +32,7 @@ export class SeriesService {
       [
         {
           $match: {
-            _id: new ObjectId(series._id),
+            _id: series._id,
           },
         },
         {
@@ -45,7 +44,7 @@ export class SeriesService {
       [
         {
           $match: {
-            _id: new ObjectId(series._id),
+            _id: series._id,
           },
         },
         {
@@ -87,7 +86,7 @@ export class SeriesService {
       [
         {
           $match: {
-            _id: new ObjectId(series._id),
+            _id: series._id,
           },
         },
         {
@@ -107,7 +106,7 @@ export class SeriesService {
       [
         {
           $match: {
-            _id: new ObjectId(series._id),
+            _id: series._id,
           },
         },
         {
@@ -138,7 +137,7 @@ export class SeriesService {
     return this.seriesModel.aggregate([
       {
         $match: {
-          _id: new ObjectId(series._id),
+          _id: series._id,
         },
       },
       {

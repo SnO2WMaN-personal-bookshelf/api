@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {ObjectId} from 'mongodb';
 import {Model} from 'mongoose';
 import {PaginationRequiredArgs} from '../paginate/argstype/pagination-required.argstype';
 import {getConnectionFromMongooseModel} from '../paginate/mongoose';
@@ -29,7 +28,7 @@ export class AuthorsService {
       [
         {
           $match: {
-            _id: new ObjectId(author._id),
+            _id: author._id,
           },
         },
         {
@@ -49,7 +48,7 @@ export class AuthorsService {
       [
         {
           $match: {
-            _id: new ObjectId(author._id),
+            _id: author._id,
           },
         },
         {
@@ -86,7 +85,7 @@ export class AuthorsService {
       [
         {
           $match: {
-            _id: new ObjectId(author._id),
+            _id: author._id,
           },
         },
         {
@@ -112,7 +111,7 @@ export class AuthorsService {
       [
         {
           $match: {
-            _id: new ObjectId(author._id),
+            _id: author._id,
           },
         },
         {

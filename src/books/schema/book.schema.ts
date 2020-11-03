@@ -5,6 +5,9 @@ import {Document} from 'mongoose';
 @Schema()
 @ObjectType()
 export class Book extends Document {
+  @Prop({type: () => String})
+  _id!: string;
+
   @Prop()
   @Field(() => String)
   title!: string;

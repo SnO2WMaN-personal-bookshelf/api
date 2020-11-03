@@ -7,6 +7,9 @@ import {Paginated} from '../../paginate/paginated.types';
 @Schema()
 @ObjectType()
 export class Series extends Document {
+  @Prop({type: () => String})
+  _id!: string;
+
   @Prop()
   @Field(() => String, {description: 'タイトル'})
   title!: string;

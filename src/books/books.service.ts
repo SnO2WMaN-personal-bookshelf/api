@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {ObjectId} from 'mongodb';
 import {Model} from 'mongoose';
 import {Book} from './schema/book.schema';
 
@@ -30,7 +29,7 @@ export class BooksService {
     return this.bookModel.aggregate([
       {
         $match: {
-          _id: new ObjectId(book._id),
+          _id: book._id,
         },
       },
       {
@@ -63,7 +62,7 @@ export class BooksService {
     return this.bookModel.aggregate([
       {
         $match: {
-          _id: new ObjectId(book._id),
+          _id: book._id,
         },
       },
       {
