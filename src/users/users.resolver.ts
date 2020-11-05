@@ -13,7 +13,7 @@ export class UsersResolver {
     private readonly auth0Service: Auth0Service,
   ) {}
 
-  @Query(() => User, {nullable: true})
+  @Query(() => User)
   async user(
     @Args('id', {type: () => ID, nullable: true}) id?: string,
     @Args('name', {type: () => String, nullable: true}) name?: string,
@@ -24,7 +24,7 @@ export class UsersResolver {
       return this.usersService.getUserById(id).then((user) => user || null);
     }
 
-    return null;
+    throw new Error('Unexist user!');
   }
 
   @Query(() => User, {nullable: false})

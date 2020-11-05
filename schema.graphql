@@ -241,7 +241,7 @@ type Query {
   bookshelf(id: ID!): Bookshelf
   series(id: ID!): Series!
   allSeries: [Series!]!
-  user(name: String, id: ID): User
+  user(name: String, id: ID): User!
   currentUser: User!
   allUsers: [User!]!
 }
