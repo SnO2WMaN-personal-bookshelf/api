@@ -8,7 +8,7 @@ export class Author extends Document {
   @Prop({type: () => String})
   _id!: string;
 
-  @Prop()
+  @Prop({text: true})
   @Field(() => String)
   name!: string;
 }

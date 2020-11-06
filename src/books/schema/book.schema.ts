@@ -8,7 +8,7 @@ export class Book extends Document {
   @Prop({type: () => String})
   _id!: string;
 
-  @Prop()
+  @Prop({text: true})
   @Field(() => String)
   title!: string;
 
@@ -22,4 +22,5 @@ export class Book extends Document {
     roles: string[];
   }[];
 }
+
 export const BookSchema = SchemaFactory.createForClass(Book);

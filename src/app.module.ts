@@ -15,6 +15,7 @@ import typeormConfig from './configs/typeorm.config';
 import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
 import {MongooseService} from './mongoose/mongoose.service';
 import {OpenBDModule} from './openbd/openbd.module';
+import {SearchModule} from './search/search.module';
 import {SeriesModule} from './series/series.module';
 import {TypeORMConfigService} from './typeorm/typeorm.service';
 import {UsersModule} from './users/users.module';
@@ -42,6 +43,7 @@ import {UsersModule} from './users/users.module';
     SeriesModule,
     AuthModule,
     Auth0Module,
+    SearchModule,
   ],
   providers: [
     {

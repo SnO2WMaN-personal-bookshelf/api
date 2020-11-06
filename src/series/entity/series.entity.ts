@@ -10,7 +10,7 @@ export class Series extends Document {
   @Prop({type: () => String})
   _id!: string;
 
-  @Prop()
+  @Prop({text: true})
   @Field(() => String, {description: 'タイトル'})
   title!: string;
 

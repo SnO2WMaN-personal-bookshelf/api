@@ -239,12 +239,15 @@ type Query {
   allAuthors: [Author!]!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf
+  search(limit: Int!, query: String!): [MixedSearchResult!]!
   series(id: ID!): Series!
   allSeries: [Series!]!
   user(name: String, id: ID): User!
   currentUser: User!
   allUsers: [User!]!
 }
+
+union MixedSearchResult = Author | Series | Book
 
 type Mutation {
   createBookshelfRecord(data: CreateBookshelfRecordInput!): BookshelfRecord!
