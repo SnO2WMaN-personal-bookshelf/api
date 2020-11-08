@@ -13,6 +13,7 @@ services:
       - ./mongo/sample/output:/sample
     networks:
       - mypcdb-local-network
+
   postgresql:
     environment:
       POSTGRES_DB: ${TYPEORM_DATABASE}
@@ -24,22 +25,41 @@ services:
       - ${TYPEORM_PORT}:5432
     networks:
       - mypcdb-local-network
-  pgweb:
-    image: sosedoff/pgweb:latest
-    depends_on:
-      - postgresql
-    ports:
-      - 8081:8081
-    environment:
-      DATABASE_URL: postgres://${TYPEORM_USERNAME}:${TYPEORM_PASSWORD}@postgresql:${TYPEORM_PORT}/${TYPEORM_DATABASE}?sslmode=disable
-    networks:
-      - mypcdb-local-network
+
   adminer:
     image: adminer:latest
     depends_on:
       - postgresql
     ports:
       - 8080:8080
+    networks:
+      - mypcdb-local-network
+
+  compensator:
+    build:
+      context: ./compensator
+      dockerfile: Dockerfile
+    ports:
+      - ${COMPENSATOR_PORT}:3000
+    networks:
+      - mypcdb-local-network
+
+  bookcover-server:
+    build:
+      context: ./bookcover-server
+      dockerfile: Dockerfile
+    ports:
+      - ${BOOKCOVER_SERVER_PORT}:4000
+    depends_on:
+      - mongo
+      - compensator
+    environment:
+      COMPENSATOR_URL: ${COMPENSATOR_URL}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MONGO_HOST: mongo
+      MONGO_PORT: ${MONGO_PORT}
     networks:
       - mypcdb-local-network
 
