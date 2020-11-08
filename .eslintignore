@@ -1,4 +1,7 @@
 coverage/
 dist/
 
+docker/bookcover-server/
+docker/compensator/
+
 schema.graphql
