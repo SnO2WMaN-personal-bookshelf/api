@@ -1,6 +1,8 @@
-import {Injectable} from '@nestjs/common';
+import {HttpService, Inject, Injectable} from '@nestjs/common';
+import {ConfigType} from '@nestjs/config';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
+import booksConfig from './books.config';
 import {Book} from './schema/book.schema';
 
 @Injectable()
@@ -8,6 +10,11 @@ export class BooksService {
   constructor(
     @InjectModel(Book.name)
     private readonly bookModel: Model<Book>,
+
+    @Inject(booksConfig.KEY)
+    private configService: ConfigType<typeof booksConfig>,
+
+    private readonly httpService: HttpService,
   ) {}
 
   async getBook(id: string) {
@@ -100,5 +107,17 @@ export class BooksService {
         },
       },
     ]);
+  }
+
+  async bookcover(book: Book) {
+    return this.httpService
+      .get<string>(this.configService.bookcoverServerUrl, {
+        params: {id: book._id},
+      })
+      .toPromise()
+      .then(({data}) => data)
+      .catch((error) => {
+        return null;
+      });
   }
 }
