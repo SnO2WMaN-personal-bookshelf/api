@@ -1,3 +1,9 @@
 [submodule "docker/mongo/sample"]
 	path = docker/mongo/sample
 	url = git@github.com:SnO2WMaN-HQ/my-personal-comic-db-sample-data.git
+[submodule "docker/bookcover-server"]
+	path = docker/bookcover-server
+	url = git@github.com:SnO2WMaN-personal-bookshelf/bookcover-server.git
+[submodule "docker/compensator"]
+	path = docker/compensator
+	url = git@github.com:SnO2WMaN-personal-bookshelf/compensator.git
