@@ -2,20 +2,24 @@ version: '3.7'
 
 services:
   mongo:
-    ports:
-      - ${MONGO_PORT}:27017
+    image: mongo:4
     environment:
+      TZ: Asia/Tokyo
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     volumes:
       - ./mongo/initdb:/docker-entrypoint-initdb.d
       - ./mongo/sample/output:/sample
+    ports:
+      - ${MONGO_PORT}:27017
     networks:
       - mypcdb-local-network
 
   postgresql:
+    image: postgres:latest
     environment:
+      TZ: Asia/Tokyo
       POSTGRES_DB: ${TYPEORM_DATABASE}
       POSTGRES_USER: ${TYPEORM_USERNAME}
       POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
