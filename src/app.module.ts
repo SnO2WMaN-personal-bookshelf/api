@@ -14,7 +14,6 @@ import mongooseConfig from './configs/mongoose.config';
 import typeormConfig from './configs/typeorm.config';
 import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
 import {MongooseService} from './mongoose/mongoose.service';
-import {OpenBDModule} from './openbd/openbd.module';
 import {SearchModule} from './search/search.module';
 import {SeriesModule} from './series/series.module';
 import {TypeORMConfigService} from './typeorm/typeorm.service';
@@ -34,7 +33,6 @@ import {UsersModule} from './users/users.module';
       imports: [ConfigModule.forFeature(typeormConfig)],
       useClass: TypeORMConfigService,
     }),
-    OpenBDModule,
     UsersModule,
     BooksModule,
     BookshelvesModule,
