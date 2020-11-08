@@ -10,12 +10,12 @@ import {AuthorsModule} from './authors/authors.module';
 import {BooksModule} from './books/books.module';
 import {BookshelfRecordsModule} from './bookshelf-records/bookshelf-records.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
-import mongooseConfig from './configs/mongoose.config';
-import typeormConfig from './configs/typeorm.config';
 import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
+import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
 import {SearchModule} from './search/search.module';
 import {SeriesModule} from './series/series.module';
+import typeormConfig from './typeorm/typeorm.config';
 import {TypeORMConfigService} from './typeorm/typeorm.service';
 import {UsersModule} from './users/users.module';
 

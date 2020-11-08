@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
 import {MongooseModuleOptions, MongooseOptionsFactory} from '@nestjs/mongoose';
 import {format as formatMongoURI} from 'mongodb-uri';
-import mongooseConfig from '../configs/mongoose.config';
+import mongooseConfig from './mongoose.config';
 
 @Injectable()
 export class MongooseService implements MongooseOptionsFactory {
