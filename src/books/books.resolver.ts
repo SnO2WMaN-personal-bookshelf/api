@@ -29,7 +29,7 @@ export class BooksResolver {
 
   @Query(() => [Book])
   async allBooks() {
-    return this.bookService.getAllBooks();
+    return this.bookService.all();
   }
 
   @ResolveField((of) => String, {nullable: true})
