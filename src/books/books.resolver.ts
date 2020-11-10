@@ -32,7 +32,7 @@ export class BooksResolver {
     return this.bookService.all();
   }
 
-  @ResolveField((of) => String, {nullable: true})
+  @ResolveField((of) => String)
   async cover(@Parent() book: Book): Promise<string | null> {
     return this.bookService.bookcover(book);
   }

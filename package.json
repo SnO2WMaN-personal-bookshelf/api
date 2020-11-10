@@ -47,6 +47,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
     "typeorm": "^0.2.26",
+    "urlcat": "^2.0.4",
     "validator": "^13.1.17"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@ import {HttpService, Inject, Injectable} from '@nestjs/common';
 import {ConfigType} from '@nestjs/config';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
+import urlcat from 'urlcat';
 import {MyLogger} from '../logger/logger.service';
 import booksConfig from './books.config';
 import {Book} from './schema/book.schema';
@@ -119,15 +120,8 @@ export class BooksService {
   }
 
   async bookcover(book: Book) {
-    return this.httpService
-      .get<string>(this.configService.bookcoverServerUrl, {
-        params: {id: this.getId(book)},
-      })
-      .toPromise()
-      .then(({data}) => data)
-      .catch((error) => {
-        this.myLogger.error(JSON.stringify(error), error.stack);
-        return null;
-      });
+    return urlcat(this.configService.bookcoverServerUrl, {
+      id: this.getId(book),
+    });
   }
 }
