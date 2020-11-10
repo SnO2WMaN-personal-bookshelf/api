@@ -4,7 +4,7 @@ COMPOSE_FILE_LOCAL := docker/docker-compose.local.yml
 
 ENV_LOCAL_FILE := .env
 ENV_LOCAL = $(shell cat $(ENV_LOCAL_FILE)) ;\
-						export COMPOSE_PROJECT_NAME=local ;\
+						export COMPOSE_PROJECT_NAME=local-api ;\
 						export COMPOSE_FILE=${COMPOSE_FILE_LOCAL};
 
 .PHONY: dc-local-rebuild
