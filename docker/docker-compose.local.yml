@@ -13,8 +13,6 @@ services:
       - ./mongo/sample/output:/sample
     ports:
       - ${MONGO_PORT}:27017
-    networks:
-      - mypcdb-local-network
 
   postgresql:
     image: postgres:latest
@@ -27,8 +25,6 @@ services:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - ${TYPEORM_PORT}:5432
-    networks:
-      - mypcdb-local-network
 
   adminer:
     image: adminer:latest
@@ -36,8 +32,6 @@ services:
       - postgresql
     ports:
       - 8080:8080
-    networks:
-      - mypcdb-local-network
 
   compensator:
     build:
@@ -45,8 +39,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - ${COMPENSATOR_PORT}:3000
-    networks:
-      - mypcdb-local-network
 
   bookcover-server:
     build:
@@ -64,12 +56,6 @@ services:
       MONGO_DATABASE: ${MONGO_DATABASE}
       MONGO_HOST: mongo
       MONGO_PORT: ${MONGO_PORT}
-    networks:
-      - mypcdb-local-network
 
 volumes:
   postgresql-data:
-
-networks:
-  mypcdb-local-network:
-    driver: bridge

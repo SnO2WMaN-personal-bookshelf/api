@@ -7,6 +7,13 @@ ENV_LOCAL = $(shell cat $(ENV_LOCAL_FILE)) ;\
 						export COMPOSE_PROJECT_NAME=local ;\
 						export COMPOSE_FILE=${COMPOSE_FILE_LOCAL};
 
+.PHONY: dc-local-rebuild
+dc-local-rebuild:
+	$(ENV_LOCAL)\
+	export COMPOSE_DOCKER_CLI_BUILD=1;\
+	export DOCKER_BUILDKIT=1;\
+		docker-compose build --parallel --no-cache
+
 .PHONY: dc-local-up
 dc-local-up:
 	$(ENV_LOCAL)\
