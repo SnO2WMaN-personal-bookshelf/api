@@ -250,10 +250,5 @@ type Query {
 union MixedSearchResult = Author | Series | Book
 
 type Mutation {
-  createBookshelfRecord(data: CreateBookshelfRecordInput!): BookshelfRecord!
-}
-
-input CreateBookshelfRecordInput {
-  bookshelf: ID!
-  book: ID!
+  createBookshelfRecord(bookshelf: ID!, book: ID!): BookshelfRecord!
 }

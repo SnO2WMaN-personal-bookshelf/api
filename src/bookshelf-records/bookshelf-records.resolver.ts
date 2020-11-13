@@ -32,7 +32,7 @@ export class BookshelfRecordsResolver {
 
   @Mutation((returns) => BookshelfRecord)
   async createBookshelfRecord(
-    @Args('data') {book, bookshelf}: CreateBookshelfRecordInput,
+    @Args() {book, bookshelf}: CreateBookshelfRecordInput,
   ) {
     return this.bookshelfRecordService.create(bookshelf, book);
   }

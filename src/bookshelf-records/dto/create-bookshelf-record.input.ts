@@ -1,6 +1,6 @@
-import {Field, ID, InputType} from '@nestjs/graphql';
+import {ArgsType, Field, ID} from '@nestjs/graphql';
 
-@InputType()
+@ArgsType()
 export class CreateBookshelfRecordInput {
   @Field(() => ID, {nullable: false})
   bookshelf!: string;
