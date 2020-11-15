@@ -167,8 +167,22 @@ type BookshelfRecordConnection {
   edges: [BookshelfRecordEdgeType!]!
 }
 
+type User {
+  id: ID!
+  auth0Sub: String!
+  name: String!
+  displayName: String!
+  picture: String!
+  readBooks: Bookshelf!
+  readingBooks: Bookshelf!
+  wishBooks: Bookshelf!
+}
+
 type Bookshelf {
   id: ID!
+  title: String
+  type: BookshelfType!
+  owner: User!
   total: Int!
   recordsConnection(
     orderBy: OrderByDateInput
@@ -185,6 +199,13 @@ type Bookshelf {
     """Paginate last"""
     last: Int
   ): BookshelfRecordConnection!
+}
+
+enum BookshelfType {
+  READ
+  READING
+  WISH
+  CREATED
 }
 
 input OrderByDateInput {
@@ -219,17 +240,6 @@ type SerialSeriesRecordConnection {
   aggregate: SerialSeriesRecordAggregate!
   pageInfo: SerialSeriesRecordPageInfo!
   edges: [SerialSeriesRecordEdgeType!]!
-}
-
-type User {
-  id: ID!
-  auth0Sub: String!
-  name: String!
-  displayName: String!
-  picture: String!
-  readBooks: Bookshelf!
-  readingBooks: Bookshelf!
-  wishBooks: Bookshelf!
 }
 
 type Query {
