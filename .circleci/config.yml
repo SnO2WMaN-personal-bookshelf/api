@@ -90,7 +90,3 @@ workflows:
       - build:
           requires:
             - test
-      - build-docker:
-          requires:
-            - docker/hadolint
-            - build
