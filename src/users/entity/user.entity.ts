@@ -2,7 +2,7 @@ import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {
   Column,
   Entity,
-  JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -51,4 +51,8 @@ export class User {
   })
   @Field(() => Bookshelf)
   wishBooks!: Bookshelf;
+
+  @OneToMany((type) => Bookshelf, (bookshelf) => bookshelf.owner)
+  @Field(() => [Bookshelf])
+  userBookshelves!: Bookshelf[];
 }

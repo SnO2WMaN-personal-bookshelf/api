@@ -176,6 +176,7 @@ type User {
   readBooks: Bookshelf!
   readingBooks: Bookshelf!
   wishBooks: Bookshelf!
+  userBookshelves: [Bookshelf!]!
 }
 
 type Bookshelf {

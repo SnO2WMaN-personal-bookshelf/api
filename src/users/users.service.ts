@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
-import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
+import {Bookshelf, BookshelfType} from '../bookshelves/entity/bookshelf.entity';
 import {User} from './entity/user.entity';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class UsersService {
 
   async getUserById(id: string) {
     return this.usersRepository.findOne(id, {
-      relations: ['readBooks', 'readingBooks', 'wishBooks'],
+      relations: ['readBooks', 'readingBooks', 'wishBooks', 'userBookshelves'],
     });
   }
 
