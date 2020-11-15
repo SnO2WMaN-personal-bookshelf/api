@@ -31,24 +31,4 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(usersService).toBeDefined();
   });
-
-  describe('getUserById()', () => {
-    it('IDに結び付けられたユーザーを取得', async () => {
-      jest.spyOn(usersRepogitory, 'findOne').mockResolvedValueOnce({
-        id: '1',
-        name: 'john',
-        displayName: 'John',
-        auth0Sub: '',
-        picture: '',
-        readBooks: {id: '1', records: []},
-        readingBooks: {id: '2', records: []},
-        wishBooks: {id: '3', records: []},
-      });
-
-      const user = await usersService.getUserById('1');
-      expect(user).toHaveProperty('id');
-      expect(user).toHaveProperty('name');
-      expect(user).toHaveProperty('readBooks');
-    });
-  });
 });
