@@ -14,6 +14,10 @@ export class BookshelvesService {
     private readonly bookshelfRecordsRepository: Repository<BookshelfRecord>,
   ) {}
 
+  async all() {
+    return this.bookshelvesRepository.find();
+  }
+
   async getBookshelf(id: string) {
     return this.bookshelvesRepository.findOneOrFail(id, {
       relations: ['records'],
