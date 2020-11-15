@@ -239,6 +239,7 @@ type Query {
   allAuthors: [Author!]!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf
+  allBookshelves: [Bookshelf!]!
   search(limit: Int!, query: String!): [MixedSearchResult!]!
   series(id: ID!): Series!
   allSeries: [Series!]!

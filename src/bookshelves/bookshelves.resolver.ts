@@ -26,6 +26,11 @@ export class BookshelvesResolver {
     return this.bookshelvesService.getBookshelf(id);
   }
 
+  @Query(() => [Bookshelf])
+  async allBookshelves() {
+    return this.bookshelvesService.all();
+  }
+
   @ResolveField((of) => Int)
   async total(
     @Parent()
