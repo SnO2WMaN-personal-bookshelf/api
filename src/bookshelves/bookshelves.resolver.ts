@@ -21,8 +21,10 @@ export class BookshelvesResolver {
     private bookshelfRecordService: BookshelfRecordsService,
   ) {}
 
-  @Query(() => Bookshelf, {nullable: true})
-  async bookshelf(@Args('id', {type: () => ID}) id: string) {
+  @Query(() => Bookshelf)
+  async bookshelf(
+    @Args('id', {type: () => ID}) id: string,
+  ): Promise<Bookshelf> {
     return this.bookshelvesService.getBookshelf(id);
   }
 
