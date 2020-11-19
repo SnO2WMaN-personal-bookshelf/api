@@ -15,7 +15,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: yarn
-      - run: yarn build
+      - run: yarn run build
       - store_artifacts:
           path: ./dist
 
@@ -35,7 +35,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: yarn
-      - run: yarn lint:prettier
+      - run: yarn run lint:prettier
 
   lint-eslint:
     executor:
@@ -47,7 +47,7 @@ jobs:
           pkg-manager: yarn
       - restore_cache:
           key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run: yarn lint:eslint --cache --format junit --output-file ./junit/eslint.xml
+      - run: yarn run lint:eslint --cache --format junit --output-file ./junit/eslint.xml
       - save_cache:
           key: eslint-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
@@ -65,7 +65,7 @@ jobs:
           pkg-manager: yarn
       - run:
           command: |
-            yarn test --ci \
+            yarn run test --ci \
               --reporters=default --reporters=jest-junit \
               --testResultsProcessor=jest-junit
           environment:
@@ -78,15 +78,51 @@ jobs:
       - codecov/upload:
           file: ./coverage/lcov.info
 
+  test-medium:
+    environment:
+      TYPEORM_USERNAME: 'user'
+      TYPEORM_PASSWORD: 'pass'
+      TYPEORM_DATABASE: 'test-db'
+      TYPEORM_HOST: 'localhost'
+      TYPEORM_PORT: 5432
+    docker:
+      - image: cimg/node:12.18
+      - image: circleci/postgres:12-alpine-ram
+        environment:
+          POSTGRES_DB: 'test-db'
+          POSTGRES_USER: 'user'
+          POSTGRES_PASSWORD: 'pass'
+    steps:
+      - checkout
+      - docker/install-docker
+      - docker/install-dockerize
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: |
+            yarn run test-medium --ci \
+              --reporters=default --reporters=jest-junit \
+              --testResultsProcessor=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./junit
+            JEST_JUNIT_OUTPUT_NAME: jest.xml
+      - store_test_results:
+          path: ./junit
+
 workflows:
   version: 2
   main:
     jobs:
       - lint-eslint
       - lint-prettier
-      - test
       - docker/hadolint:
           dockerfiles: Dockerfile
+      - test
+      - test-medium
       - build:
           requires:
+            - lint-eslint
+            - lint-prettier
             - test
+            - test-medium
