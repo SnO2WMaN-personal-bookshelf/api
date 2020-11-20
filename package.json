@@ -13,6 +13,7 @@
     "test:medium": "scripty",
     "test:unit": "scripty",
     "clean": "rimraf dist coverage",
+    "ts-check": "tsc --noEmit",
     "lint": "scripty",
     "lint:circleci": "scripty",
     "lint:eslint": "scripty",

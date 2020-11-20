@@ -55,6 +55,16 @@ jobs:
       - store_test_results:
           path: ./junit
 
+  ts-check:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn run ts-check
+
   test-unit:
     executor:
       name: 'node/default'
@@ -118,11 +128,17 @@ workflows:
       - lint-prettier
       - docker/hadolint:
           dockerfiles: Dockerfile
-      - test-unit
-      - test-medium
+      - ts-check
+      - test-unit:
+          requires:
+            - ts-check
+      - test-medium:
+          requires:
+            - ts-check
       - build:
           requires:
             - lint-eslint
             - lint-prettier
+            - ts-check
             - test-unit
             - test-medium
