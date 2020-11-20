@@ -6,11 +6,11 @@ import {
   TypeOrmModule,
 } from '@nestjs/typeorm';
 import {Connection, Repository} from 'typeorm';
-import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
-import typeormConfig from '../typeorm/typeorm.config';
-import {TypeORMConfigService} from '../typeorm/typeorm.service';
-import {User} from './entity/user.entity';
-import {UsersService} from './users.service';
+import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
+import typeormConfig from '../../../typeorm/typeorm.config';
+import {TypeORMConfigService} from '../../../typeorm/typeorm.service';
+import {User} from '../../entity/user.entity';
+import {UsersService} from '../../users.service';
 
 describe('UsersService with connected DB', () => {
   let module: TestingModule;

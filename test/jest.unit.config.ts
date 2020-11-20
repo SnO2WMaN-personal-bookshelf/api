@@ -1,11 +1,10 @@
 import type {Config} from '@jest/types';
+import base from './jest.base.config';
 
 const config: Config.InitialOptions = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  ...base,
   collectCoverage: true,
-  rootDir: 'src',
-  testPathIgnorePatterns: ['docker/'],
   testMatch: ['<rootDir>/**/*.test.ts'],
+  testPathIgnorePatterns: ['test/medium/'],
 };
 export default config;

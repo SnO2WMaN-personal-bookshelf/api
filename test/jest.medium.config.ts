@@ -1,9 +1,9 @@
 import type {Config} from '@jest/types';
-import base from './jest.config';
+import base from './jest.base.config';
 
 const config: Config.InitialOptions = {
   ...base,
   collectCoverage: false,
-  testMatch: ['<rootDir>/**/*.db-test.ts'],
+  testMatch: ['<rootDir>/**/test/medium/*.test.ts'],
 };
 export default config;
