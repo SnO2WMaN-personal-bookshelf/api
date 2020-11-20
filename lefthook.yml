@@ -48,3 +48,9 @@ pre-commit:
           -v $(pwd)/.circleci:/go/.circleci \
           -it --rm circleci/circleci-cli \
           circleci config validate
+
+pre-push:
+  parallel: true
+  commands:
+    ts-check:
+      run: tsc --noEmit
