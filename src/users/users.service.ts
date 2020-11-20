@@ -69,4 +69,24 @@ export class UsersService {
   async allUsers() {
     return this.usersRepository.find();
   }
+
+  async signUpUser({
+    displayName,
+    ...payload
+  }: {
+    auth0Sub: string;
+    name: string;
+    displayName?: string;
+    picture?: string;
+  }) {
+    return this.usersRepository.save({
+      ...payload,
+      readBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
+      readingBooks: this.bookshelvesRepository.create({
+        type: BookshelfType.READING,
+      }),
+      wishBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
+      displayName: displayName || payload.name,
+    });
+  }
 }
