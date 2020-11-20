@@ -12,19 +12,19 @@
   },
   "overrides": [
     {
-      "files": ["*.entity.ts"],
+      "files": ["src/**/*.entity.ts"],
       "rules": {
         "import/no-cycle": [0]
       }
     },
     {
-      "files": ["*.module.ts"],
+      "files": ["src/**/*.module.ts"],
       "rules": {
         "@typescript-eslint/no-extraneous-class": [0]
       }
     },
     {
-      "files": ["*.config.ts"],
+      "files": ["src/**/*.config.ts"],
       "rules": {
         "no-process-env": [0]
       }
