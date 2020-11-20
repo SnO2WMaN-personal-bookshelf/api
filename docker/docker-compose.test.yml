@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  postgresql:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+    ports:
+      - ${TYPEORM_PORT}:5432

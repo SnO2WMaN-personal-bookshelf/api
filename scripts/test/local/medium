@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+export COMPOSE_DOCKER_CLI_BUILD=1;
+export DOCKER_BUILDKIT=1;
+
+export COMPOSE_PATH_SEPARATOR=":";
+
+export COMPOSE_PROJECT_NAME="local-api";
+export COMPOSE_FILE="docker/docker-compose.test.yml";
+
+export TYPEORM_USERNAME="test-user";
+export TYPEORM_PASSWORD="test-pass";
+export TYPEORM_DATABASE="test-database";
+export TYPEORM_HOST="localhost";
+export TYPEORM_PORT=31001;
+
+docker-compose up -d -V;
+dockerize -wait tcp://${TYPEORM_HOST}:${TYPEORM_PORT} -timeout 1m
+
+jest --config=test/jest.medium.config.ts;
+
+docker-compose stop;

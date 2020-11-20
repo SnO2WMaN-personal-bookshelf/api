@@ -8,6 +8,8 @@
     "debug": "nest start --watch --debug ",
     "start": "nest start",
     "start:prod": "node dist/main",
+    "test:local:medium": "scripty",
+    "test:local:unit": "yarn run test:unit",
     "test:medium": "scripty",
     "test:unit": "scripty",
     "clean": "rimraf dist coverage",
