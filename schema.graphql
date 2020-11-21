@@ -1,36 +1,34 @@
-# ------------------------------------------------------
-# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
-# ------------------------------------------------------
-
-type Author {
-  name: String!
+type Book {
+  title: String!
+  isbn: String
   id: ID!
-  books(
-    """Paginate before opaque cursor"""
-    before: String
+  cover: String!
+  authors: [BookAuthorConnection!]!
+  series: [Series!]!
+}
 
-    """Paginate after opaque cursor"""
-    after: String
+type BookAggregate {
+  count: Int!
+}
 
-    """Paginate first"""
-    first: Int
+type BookPageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor: String
+  endCursor: String
+}
 
-    """Paginate last"""
-    last: Int
-  ): BookConnection!
-  series(
-    """Paginate before opaque cursor"""
-    before: String
+type BookEdgeType {
+  node: Book!
 
-    """Paginate after opaque cursor"""
-    after: String
+  """Used in `before` and `after` args"""
+  cursor: String!
+}
 
-    """Paginate first"""
-    first: Int
-
-    """Paginate last"""
-    last: Int
-  ): SeriesConnection!
+type BookConnection {
+  aggregate: BookAggregate!
+  pageInfo: BookPageInfo!
+  edges: [BookEdgeType!]!
 }
 
 type Series {
@@ -100,42 +98,40 @@ type SeriesConnection {
   edges: [SeriesEdgeType!]!
 }
 
-type Book {
-  title: String!
-  isbn: String
+type Author {
+  name: String!
   id: ID!
-  cover: String!
-  authors: [BookAuthorConnection!]!
-  series: [Series!]!
+  books(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): BookConnection!
+  series(
+    """Paginate before opaque cursor"""
+    before: String
+
+    """Paginate after opaque cursor"""
+    after: String
+
+    """Paginate first"""
+    first: Int
+
+    """Paginate last"""
+    last: Int
+  ): SeriesConnection!
 }
 
 type BookAuthorConnection {
   roles: [String!]
   author: Author!
-}
-
-type BookAggregate {
-  count: Int!
-}
-
-type BookPageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor: String
-  endCursor: String
-}
-
-type BookEdgeType {
-  node: Book!
-
-  """Used in `before` and `after` args"""
-  cursor: String!
-}
-
-type BookConnection {
-  aggregate: BookAggregate!
-  pageInfo: BookPageInfo!
-  edges: [BookEdgeType!]!
 }
 
 type BookshelfRecord {
@@ -244,10 +240,10 @@ type SerialSeriesRecordConnection {
 }
 
 type Query {
-  book(id: ID!): Book!
-  allBooks: [Book!]!
   author(id: ID!): Author!
   allAuthors: [Author!]!
+  book(id: ID!): Book!
+  allBooks: [Book!]!
   bookshelfRecord(id: ID!): BookshelfRecord
   bookshelf(id: ID!): Bookshelf!
   allBookshelves: [Bookshelf!]!

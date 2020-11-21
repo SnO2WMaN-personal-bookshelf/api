@@ -22,7 +22,7 @@ import {UsersModule} from './users/users.module';
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.graphql',
+      autoSchemaFile: true,
       context: ({req}) => ({req}),
     }),
     MongooseModule.forRootAsync({
