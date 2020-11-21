@@ -1,5 +1,6 @@
-import {Args, ID, Query, Resolver} from '@nestjs/graphql';
+import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {CurrentUser} from '../decolators/current-user.decolator';
+import {SignUpUserArgs} from './dto/signup-user.argstype';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -27,6 +28,20 @@ export class UsersResolver {
 
     if (user) return user;
     else throw new Error(`User ${sub} doesn't exist`);
+  }
+
+  @Mutation(() => User, {nullable: false})
+  async signUpUser(
+    @CurrentUser() currentUser: {sub: string},
+    @Args('payload', {type: () => SignUpUserArgs}) payload: SignUpUserArgs,
+  ) {
+    if (await this.currentUser(currentUser).catch(() => false))
+      throw new Error('Already signed up');
+
+    return this.usersService.signUpUser({
+      auth0Sub: currentUser.sub,
+      ...payload,
+    });
   }
 
   @Query(() => [User])

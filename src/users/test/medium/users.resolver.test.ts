@@ -56,6 +56,32 @@ describe('UsersResolver with mocked TypeORM repository', () => {
     expect(UsersResolver).toBeDefined();
   });
 
+  describe('signUpUser()', () => {
+    it('signUpUserを呼び出してユーザーが生成される', async () => {
+      const newUser = await usersResolver.signUpUser(
+        {sub: 'auth0:1'},
+        {
+          name: 'user_id',
+          displayName: 'Display Name',
+          picture: 'https://example.com/user_id',
+        },
+      );
+
+      expect(newUser).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(newUser).toHaveProperty('id');
+      expect(newUser).toHaveProperty('name', 'user_id');
+      expect(newUser).toHaveProperty('displayName', 'Display Name');
+      expect(newUser).toHaveProperty('picture', 'https://example.com/user_id');
+    });
+
+    it('同じsubのユーザーを作ろうとするとErrorを返す', async () => {
+      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'user_id'});
+      await expect(
+        usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'user_id'}),
+      ).rejects.toThrow('Already signed up');
+    });
+  });
+
   describe('currentUser()', () => {
     it('UserServiceのsignUpUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
       await usersService.signUpUser({
@@ -70,6 +96,25 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       expect(actual).toHaveProperty('id');
       expect(actual).toHaveProperty('name', 'user_id');
       expect(actual).toHaveProperty('displayName', 'Display Name');
+    });
+
+    it('UserResolverのsignUpUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
+      await usersResolver.signUpUser(
+        {sub: 'auth0:1'},
+        {
+          name: 'user_id',
+          displayName: 'Display Name',
+          picture: 'https://example.com/user_id',
+        },
+      );
+
+      const actual = await usersResolver.currentUser({sub: 'auth0:1'});
+
+      expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(actual).toHaveProperty('id');
+      expect(actual).toHaveProperty('name', 'user_id');
+      expect(actual).toHaveProperty('displayName', 'Display Name');
+      expect(actual).toHaveProperty('picture', 'https://example.com/user_id');
     });
   });
 });
