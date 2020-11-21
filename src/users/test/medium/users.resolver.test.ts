@@ -61,32 +61,41 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       const newUser = await usersResolver.signUpUser(
         {sub: 'auth0:1'},
         {
-          name: 'user_id',
+          name: 'test_user',
           displayName: 'Display Name',
-          picture: 'https://example.com/user_id',
+          picture: 'https://example.com/test_user',
         },
       );
 
       expect(newUser).toHaveProperty('auth0Sub', 'auth0:1');
       expect(newUser).toHaveProperty('id');
-      expect(newUser).toHaveProperty('name', 'user_id');
+      expect(newUser).toHaveProperty('name', 'test_user');
       expect(newUser).toHaveProperty('displayName', 'Display Name');
-      expect(newUser).toHaveProperty('picture', 'https://example.com/user_id');
+      expect(newUser).toHaveProperty(
+        'picture',
+        'https://example.com/test_user',
+      );
     });
 
     it('同じsubのユーザーを作ろうとするとErrorを返す', async () => {
-      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'user_id'});
+      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user_1'});
       await expect(
-        usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'user_id'}),
-      ).rejects.toThrow('Already signed up');
+        usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user_2'}),
+      ).rejects.toThrow('User with sub auth0:1 is already signed up');
+    });
+
+    it('同じnameのユーザーを作ろうとするとErrorを返す', async () => {
+      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user'});
+      await expect(
+        usersResolver.signUpUser({sub: 'auth0:2'}, {name: 'test_user'}),
+      ).rejects.toThrow('User name test_user is already used');
     });
   });
 
   describe('currentUser()', () => {
     it('UserServiceのsignUpUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
-      await usersService.signUpUser({
-        auth0Sub: 'auth0:1',
-        name: 'user_id',
+      await usersService.signUpUser('auth0:1', {
+        name: 'test_user',
         displayName: 'Display Name',
       });
 
@@ -94,7 +103,7 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
       expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
       expect(actual).toHaveProperty('id');
-      expect(actual).toHaveProperty('name', 'user_id');
+      expect(actual).toHaveProperty('name', 'test_user');
       expect(actual).toHaveProperty('displayName', 'Display Name');
     });
 
@@ -102,9 +111,9 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       await usersResolver.signUpUser(
         {sub: 'auth0:1'},
         {
-          name: 'user_id',
+          name: 'test_user',
           displayName: 'Display Name',
-          picture: 'https://example.com/user_id',
+          picture: 'https://example.com/test_user',
         },
       );
 
@@ -112,9 +121,15 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
       expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
       expect(actual).toHaveProperty('id');
-      expect(actual).toHaveProperty('name', 'user_id');
+      expect(actual).toHaveProperty('name', 'test_user');
       expect(actual).toHaveProperty('displayName', 'Display Name');
-      expect(actual).toHaveProperty('picture', 'https://example.com/user_id');
+      expect(actual).toHaveProperty('picture', 'https://example.com/test_user');
+    });
+
+    it('存在しないユーザーについてUserResolverのcurrentUserを呼び出すとエラー', async () => {
+      await expect(usersResolver.currentUser({sub: 'auth0:1'})).rejects.toThrow(
+        "User with sub auth0:1 doesn't exist",
+      );
     });
   });
 });

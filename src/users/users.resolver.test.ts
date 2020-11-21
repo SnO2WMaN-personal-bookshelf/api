@@ -52,7 +52,7 @@ describe('UsersResolver with mocked TypeORM repository', () => {
         .mockResolvedValueOnce(undefined);
 
       await expect(usersResolver.currentUser({sub: 'auth0:1'})).rejects.toThrow(
-        "User auth0:1 doesn't exist",
+        "User with sub auth0:1 doesn't exist",
       );
     });
   });

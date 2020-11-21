@@ -70,23 +70,36 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async signUpUser({
-    displayName,
-    ...payload
-  }: {
-    auth0Sub: string;
-    name: string;
-    displayName?: string;
-    picture?: string;
-  }) {
+  async signUpUser(
+    sub: string,
+    {
+      displayName,
+      ...payload
+    }: {
+      name: string;
+      displayName?: string;
+      picture?: string;
+    },
+  ) {
+    if (await this.usersRepository.count({where: {auth0Sub: sub}}))
+      throw new Error(`User with sub ${sub} is already signed up`);
+
+    if (await this.usersRepository.count({where: {name: payload.name}}))
+      throw new Error(`User name ${payload.name} is already used`);
+
     return this.usersRepository.save({
+      auth0Sub: sub,
       ...payload,
-      readBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
+      displayName: displayName || payload.name,
+      readBooks: this.bookshelvesRepository.create({
+        type: BookshelfType.WISH,
+      }),
       readingBooks: this.bookshelvesRepository.create({
         type: BookshelfType.READING,
       }),
-      wishBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
-      displayName: displayName || payload.name,
+      wishBooks: this.bookshelvesRepository.create({
+        type: BookshelfType.WISH,
+      }),
     });
   }
 }

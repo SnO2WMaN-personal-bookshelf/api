@@ -27,7 +27,7 @@ export class UsersResolver {
     const user = await this.usersService.getUserFromAuth0Sub(sub);
 
     if (user) return user;
-    else throw new Error(`User ${sub} doesn't exist`);
+    else throw new Error(`User with sub ${sub} doesn't exist`);
   }
 
   @Mutation(() => User, {nullable: false})
@@ -35,13 +35,7 @@ export class UsersResolver {
     @CurrentUser() currentUser: {sub: string},
     @Args('payload', {type: () => SignUpUserArgs}) payload: SignUpUserArgs,
   ) {
-    if (await this.currentUser(currentUser).catch(() => false))
-      throw new Error('Already signed up');
-
-    return this.usersService.signUpUser({
-      auth0Sub: currentUser.sub,
-      ...payload,
-    });
+    return this.usersService.signUpUser(currentUser.sub, payload);
   }
 
   @Query(() => [User])
