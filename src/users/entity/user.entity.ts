@@ -4,7 +4,6 @@ import {
   Entity,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {Bookshelf} from '../../bookshelves/entity/bookshelf.entity';
@@ -16,11 +15,11 @@ export class User {
   @Field((type) => ID)
   id!: string;
 
-  @PrimaryColumn()
+  @Column({unique: true})
   @Field()
   auth0Sub!: string;
 
-  @PrimaryColumn({unique: true})
+  @Column({unique: true})
   @Field()
   name!: string;
 
