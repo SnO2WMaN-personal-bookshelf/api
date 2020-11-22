@@ -65,6 +65,17 @@ jobs:
           pkg-manager: yarn
       - run: yarn run ts-check
 
+  schema-check:
+    executor:
+      name: 'node/default'
+      tag: '12.18'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn run schema-generate
+      - run: test -z "$(git status schema.graphql -s)"; exit $?
+
   test-unit:
     executor:
       name: 'node/default'
@@ -129,6 +140,7 @@ workflows:
       - docker/hadolint:
           dockerfiles: Dockerfile
       - ts-check
+      - schema-check
       - test-unit:
           requires:
             - ts-check
