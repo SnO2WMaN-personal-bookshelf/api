@@ -6,6 +6,7 @@
       "debug",
       "start",
       "test",
+      "schema-generate",
       "clean",
       "ts-check",
       "lint",

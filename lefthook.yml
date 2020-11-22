@@ -3,6 +3,16 @@ commit-msg:
     commitlint:
       run: commitlint --edit ./.git/COMMIT_EDITMSG
 
+pre-push:
+  parallel:
+    commands:
+      ts-check:
+        run: tsc --noEmit
+      schema-generate:
+        run: |
+          yarn run schema-generate &&
+          test -z "$(git status schema.graphql -s)"; exit $?
+
 pre-commit:
   parallel: true
   commands:
@@ -48,9 +58,3 @@ pre-commit:
           -v $(pwd)/.circleci:/go/.circleci \
           -it --rm circleci/circleci-cli \
           circleci config validate
-
-pre-push:
-  parallel: true
-  commands:
-    ts-check:
-      run: tsc --noEmit
