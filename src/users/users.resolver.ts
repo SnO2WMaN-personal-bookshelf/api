@@ -1,17 +1,12 @@
-import {ForbiddenException} from '@nestjs/common';
-import {Args, ID, Query, Resolver} from '@nestjs/graphql';
-import {Auth0Service} from '../auth0/auth0.service';
+import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {CurrentUser} from '../decolators/current-user.decolator';
-import {GraphQLHeaders} from '../decolators/graphql-headers.decorator';
+import {CreateUserArgs} from './dto/create-user.argstype';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(
-    private usersService: UsersService,
-    private readonly auth0Service: Auth0Service,
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   @Query(() => User)
   async user(
@@ -28,26 +23,19 @@ export class UsersResolver {
   }
 
   @Query(() => User, {nullable: false})
-  async currentUser(
-    @CurrentUser() {sub}: {sub: string},
-    @GraphQLHeaders('authorization') authorization?: string,
-  ) {
-    const existsUser = await this.usersService.getUserFromAuth0Sub(sub);
-    if (existsUser) return existsUser;
+  async currentUser(@CurrentUser() {sub}: {sub: string}): Promise<User> {
+    const user = await this.usersService.getUserFromAuth0Sub(sub);
 
-    if (authorization) {
-      const identify = await this.auth0Service.getIdentify(authorization);
-      if (identify) {
-        return this.usersService
-          .createUser({
-            ...identify,
-            displayName: identify.name,
-            name: identify.nickname,
-          })
-          .then((newUser) => this.usersService.getUserById(newUser.id));
-      }
-    }
-    throw new ForbiddenException();
+    if (user) return user;
+    else throw new Error(`User with sub ${sub} doesn't exist`);
+  }
+
+  @Mutation(() => User, {nullable: false})
+  async createUser(
+    @CurrentUser() currentUser: {sub: string},
+    @Args('payload', {type: () => CreateUserArgs}) payload: CreateUserArgs,
+  ) {
+    return this.usersService.createUser(currentUser.sub, payload);
   }
 
   @Query(() => [User])

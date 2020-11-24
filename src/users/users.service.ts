@@ -37,56 +37,40 @@ export class UsersService {
     return user && this.getUserById(user.id);
   }
 
-  async createUser({
-    sub: auth0Sub,
-    ...payload
-  }: {
-    sub: string;
-    picture?: string;
-    name: string;
-    displayName: string;
-  }) {
-    const readBooks = this.bookshelvesRepository.create({
-      type: BookshelfType.READ,
-    });
-    const readingBooks = this.bookshelvesRepository.create({
-      type: BookshelfType.READING,
-    });
-    const wishBooks = this.bookshelvesRepository.create({
-      type: BookshelfType.WISH,
-    });
-
-    const newUser = await this.usersRepository.create({
-      readBooks,
-      readingBooks,
-      wishBooks,
-      auth0Sub,
-      ...payload,
-    });
-    return this.usersRepository.save(newUser);
-  }
-
   async allUsers() {
     return this.usersRepository.find();
   }
 
-  async signUpUser({
-    displayName,
-    ...payload
-  }: {
-    auth0Sub: string;
-    name: string;
-    displayName?: string;
-    picture?: string;
-  }) {
+  async createUser(
+    sub: string,
+    {
+      displayName,
+      ...payload
+    }: {
+      name: string;
+      displayName?: string;
+      picture?: string;
+    },
+  ) {
+    if (await this.usersRepository.count({where: {auth0Sub: sub}}))
+      throw new Error(`User with sub ${sub} is already signed up`);
+
+    if (await this.usersRepository.count({where: {name: payload.name}}))
+      throw new Error(`User name ${payload.name} is already used`);
+
     return this.usersRepository.save({
+      auth0Sub: sub,
       ...payload,
-      readBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
+      displayName: displayName || payload.name,
+      readBooks: this.bookshelvesRepository.create({
+        type: BookshelfType.WISH,
+      }),
       readingBooks: this.bookshelvesRepository.create({
         type: BookshelfType.READING,
       }),
-      wishBooks: this.bookshelvesRepository.create({type: BookshelfType.WISH}),
-      displayName: displayName || payload.name,
+      wishBooks: this.bookshelvesRepository.create({
+        type: BookshelfType.WISH,
+      }),
     });
   }
 }
