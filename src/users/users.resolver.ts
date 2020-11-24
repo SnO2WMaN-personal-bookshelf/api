@@ -1,6 +1,6 @@
 import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {CurrentUser} from '../decolators/current-user.decolator';
-import {SignUpUserArgs} from './dto/signup-user.argstype';
+import {CreateUserArgs} from './dto/create-user.argstype';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -31,11 +31,11 @@ export class UsersResolver {
   }
 
   @Mutation(() => User, {nullable: false})
-  async signUpUser(
+  async createUser(
     @CurrentUser() currentUser: {sub: string},
-    @Args('payload', {type: () => SignUpUserArgs}) payload: SignUpUserArgs,
+    @Args('payload', {type: () => CreateUserArgs}) payload: CreateUserArgs,
   ) {
-    return this.usersService.signUpUser(currentUser.sub, payload);
+    return this.usersService.createUser(currentUser.sub, payload);
   }
 
   @Query(() => [User])

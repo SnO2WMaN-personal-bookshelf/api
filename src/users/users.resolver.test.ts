@@ -57,15 +57,15 @@ describe('UsersResolver with mocked TypeORM repository', () => {
     });
   });
 
-  describe('signUpUser()', () => {
+  describe('createUser()', () => {
     it('UserServiceで正常にユーザーが生成出来た場合それを返す', async () => {
-      jest.spyOn(usersService, 'signUpUser').mockResolvedValueOnce({
+      jest.spyOn(usersService, 'createUser').mockResolvedValueOnce({
         auth0Sub: 'auth0:1',
         id: '1',
         name: 'test_user',
         displayName: 'Display Name',
       } as User);
-      const actual = await usersResolver.signUpUser(
+      const actual = await usersResolver.createUser(
         {sub: 'auth0:1'},
         {name: 'test_user', displayName: 'Display Name'},
       );
@@ -78,13 +78,13 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
     it('既に登録されたsubの場合例外を返す', async () => {
       jest
-        .spyOn(usersService, 'signUpUser')
+        .spyOn(usersService, 'createUser')
         .mockRejectedValueOnce(
           new Error(`User with sub auth0:1 is already signed up`),
         );
 
       await expect(
-        usersResolver.signUpUser(
+        usersResolver.createUser(
           {sub: 'auth0:1'},
           {name: 'test_user', displayName: 'Display Name'},
         ),
@@ -93,13 +93,13 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
     it('既に登録されたnameの場合例外を返す', async () => {
       jest
-        .spyOn(usersService, 'signUpUser')
+        .spyOn(usersService, 'createUser')
         .mockRejectedValueOnce(
           new Error(`User name test_user is already used`),
         );
 
       await expect(
-        usersResolver.signUpUser(
+        usersResolver.createUser(
           {sub: 'auth0:1'},
           {name: 'test_user', displayName: 'Display Name'},
         ),

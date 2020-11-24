@@ -31,12 +31,12 @@ describe('UsersService with mocked TypeORM repository', () => {
     expect(usersService).toBeDefined();
   });
 
-  describe('signUpUser()', () => {
+  describe('createUser()', () => {
     it('既に登録されたsubの場合例外を返す', async () => {
       jest.spyOn(usersRepogitory, 'count').mockResolvedValueOnce(1);
 
       await expect(
-        usersService.signUpUser('auth0:1', {
+        usersService.createUser('auth0:1', {
           name: 'test_user',
           displayName: 'Display Name',
         }),
@@ -50,7 +50,7 @@ describe('UsersService with mocked TypeORM repository', () => {
         .mockResolvedValueOnce(1);
 
       await expect(
-        usersService.signUpUser('auth0:1', {
+        usersService.createUser('auth0:1', {
           name: 'test_user',
           displayName: 'Display Name',
         }),

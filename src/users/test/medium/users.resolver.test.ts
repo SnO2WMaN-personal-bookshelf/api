@@ -56,9 +56,9 @@ describe('UsersResolver with mocked TypeORM repository', () => {
     expect(UsersResolver).toBeDefined();
   });
 
-  describe('signUpUser()', () => {
-    it('signUpUserを呼び出してユーザーが生成される', async () => {
-      const newUser = await usersResolver.signUpUser(
+  describe('createUser()', () => {
+    it('createUserを呼び出してユーザーが生成される', async () => {
+      const newUser = await usersResolver.createUser(
         {sub: 'auth0:1'},
         {
           name: 'test_user',
@@ -78,23 +78,23 @@ describe('UsersResolver with mocked TypeORM repository', () => {
     });
 
     it('同じsubのユーザーを作ろうとするとErrorを返す', async () => {
-      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user_1'});
+      await usersResolver.createUser({sub: 'auth0:1'}, {name: 'test_user_1'});
       await expect(
-        usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user_2'}),
+        usersResolver.createUser({sub: 'auth0:1'}, {name: 'test_user_2'}),
       ).rejects.toThrow('User with sub auth0:1 is already signed up');
     });
 
     it('同じnameのユーザーを作ろうとするとErrorを返す', async () => {
-      await usersResolver.signUpUser({sub: 'auth0:1'}, {name: 'test_user'});
+      await usersResolver.createUser({sub: 'auth0:1'}, {name: 'test_user'});
       await expect(
-        usersResolver.signUpUser({sub: 'auth0:2'}, {name: 'test_user'}),
+        usersResolver.createUser({sub: 'auth0:2'}, {name: 'test_user'}),
       ).rejects.toThrow('User name test_user is already used');
     });
   });
 
   describe('currentUser()', () => {
-    it('UserServiceのsignUpUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
-      await usersService.signUpUser('auth0:1', {
+    it('UserServiceのcreateUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
+      await usersService.createUser('auth0:1', {
         name: 'test_user',
         displayName: 'Display Name',
       });
@@ -107,8 +107,8 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       expect(actual).toHaveProperty('displayName', 'Display Name');
     });
 
-    it('UserResolverのsignUpUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
-      await usersResolver.signUpUser(
+    it('UserResolverのcreateUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
+      await usersResolver.createUser(
         {sub: 'auth0:1'},
         {
           name: 'test_user',

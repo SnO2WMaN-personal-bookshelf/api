@@ -55,9 +55,9 @@ describe('UsersService with connected DB', () => {
     expect(bookshelvesRepogitory).toBeDefined();
   });
 
-  describe('signUpUser()', () => {
+  describe('createUser()', () => {
     it('プロパティが全てある', async () => {
-      const newUser = await usersService.signUpUser('auth0:1', {
+      const newUser = await usersService.createUser('auth0:1', {
         name: 'test_user',
         displayName: 'Test Name',
         picture: 'https://example.com/test_user',
@@ -75,7 +75,7 @@ describe('UsersService with connected DB', () => {
     });
 
     it('displayNameが与えられなかった場合nameで代用', async () => {
-      const newUser = await usersService.signUpUser('auth0:1', {
+      const newUser = await usersService.createUser('auth0:1', {
         name: 'test_user',
         picture: 'https://example.com/test_user',
       });
@@ -84,25 +84,25 @@ describe('UsersService with connected DB', () => {
     });
 
     it('pictureが与えられなかった場合nullになる', async () => {
-      const newUser = await usersService.signUpUser('auth0:1', {
+      const newUser = await usersService.createUser('auth0:1', {
         name: 'test_user',
       });
       expect(newUser).toHaveProperty('picture', null);
     });
 
     it('subが重複している場合はエラーを返す', async () => {
-      await usersService.signUpUser('auth0:1', {name: 'test_user_1'});
+      await usersService.createUser('auth0:1', {name: 'test_user_1'});
 
       await expect(
-        usersService.signUpUser('auth0:1', {name: 'test_user_2'}),
+        usersService.createUser('auth0:1', {name: 'test_user_2'}),
       ).rejects.toThrow(`User with sub auth0:1 is already signed up`);
     });
 
     it('nameが重複している場合はエラーを返す', async () => {
-      await usersService.signUpUser('auth0:1', {name: 'test_user_1'});
+      await usersService.createUser('auth0:1', {name: 'test_user_1'});
 
       await expect(
-        usersService.signUpUser('auth0:2', {name: 'test_user_1'}),
+        usersService.createUser('auth0:2', {name: 'test_user_1'}),
       ).rejects.toThrow(`User name test_user_1 is already used`);
     });
   });
