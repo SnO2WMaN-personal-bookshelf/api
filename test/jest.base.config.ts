@@ -4,5 +4,6 @@ const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   rootDir: '../src',
+  coverageDirectory: '../coverage',
 };
 export default config;
