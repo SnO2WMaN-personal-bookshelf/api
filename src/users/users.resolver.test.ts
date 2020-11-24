@@ -35,14 +35,14 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       jest.spyOn(usersService, 'getUserFromAuth0Sub').mockResolvedValueOnce({
         auth0Sub: 'auth0:1',
         id: '1',
-        name: 'user_id',
+        name: 'test_user',
         displayName: 'Display Name',
       } as User);
       const actual = await usersResolver.currentUser({sub: 'auth0:1'});
 
       expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
       expect(actual).toHaveProperty('id', '1');
-      expect(actual).toHaveProperty('name', 'user_id');
+      expect(actual).toHaveProperty('name', 'test_user');
       expect(actual).toHaveProperty('displayName', 'Display Name');
     });
 
@@ -54,6 +54,56 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       await expect(usersResolver.currentUser({sub: 'auth0:1'})).rejects.toThrow(
         "User with sub auth0:1 doesn't exist",
       );
+    });
+  });
+
+  describe('signUpUser()', () => {
+    it('UserServiceで正常にユーザーが生成出来た場合それを返す', async () => {
+      jest.spyOn(usersService, 'signUpUser').mockResolvedValueOnce({
+        auth0Sub: 'auth0:1',
+        id: '1',
+        name: 'test_user',
+        displayName: 'Display Name',
+      } as User);
+      const actual = await usersResolver.signUpUser(
+        {sub: 'auth0:1'},
+        {name: 'test_user', displayName: 'Display Name'},
+      );
+
+      expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(actual).toHaveProperty('id', '1');
+      expect(actual).toHaveProperty('name', 'test_user');
+      expect(actual).toHaveProperty('displayName', 'Display Name');
+    });
+
+    it('既に登録されたsubの場合例外を返す', async () => {
+      jest
+        .spyOn(usersService, 'signUpUser')
+        .mockRejectedValueOnce(
+          new Error(`User with sub auth0:1 is already signed up`),
+        );
+
+      await expect(
+        usersResolver.signUpUser(
+          {sub: 'auth0:1'},
+          {name: 'test_user', displayName: 'Display Name'},
+        ),
+      ).rejects.toThrow(`User with sub auth0:1 is already signed up`);
+    });
+
+    it('既に登録されたnameの場合例外を返す', async () => {
+      jest
+        .spyOn(usersService, 'signUpUser')
+        .mockRejectedValueOnce(
+          new Error(`User name test_user is already used`),
+        );
+
+      await expect(
+        usersResolver.signUpUser(
+          {sub: 'auth0:1'},
+          {name: 'test_user', displayName: 'Display Name'},
+        ),
+      ).rejects.toThrow(`User name test_user is already used`);
     });
   });
 });
