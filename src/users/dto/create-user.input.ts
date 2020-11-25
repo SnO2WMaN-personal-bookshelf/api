@@ -1,7 +1,7 @@
-import {ArgsType, Field} from '@nestjs/graphql';
+import {Field, InputType} from '@nestjs/graphql';
 
-@ArgsType()
-export class CreateUserArgs {
+@InputType()
+export class CreateUserInput {
   @Field({nullable: true})
   name!: string;
 

@@ -168,7 +168,7 @@ type User {
   auth0Sub: String!
   name: String!
   displayName: String!
-  picture: String!
+  picture: String
   readBooks: Bookshelf!
   readingBooks: Bookshelf!
   wishBooks: Bookshelf!
@@ -259,4 +259,11 @@ union MixedSearchResult = Author | Series | Book
 
 type Mutation {
   createBookshelfRecord(bookshelf: ID!, book: ID!): BookshelfRecord!
+  createUser(createUserData: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  name: String
+  displayName: String
+  picture: String
 }
