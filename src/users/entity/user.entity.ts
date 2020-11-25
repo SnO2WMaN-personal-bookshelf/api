@@ -28,8 +28,8 @@ export class User {
   displayName!: string;
 
   @Column({nullable: true})
-  @Field()
-  picture!: string;
+  @Field({nullable: true})
+  picture?: string;
 
   @OneToOne((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
     nullable: false,
