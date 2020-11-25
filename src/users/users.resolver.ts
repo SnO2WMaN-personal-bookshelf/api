@@ -1,6 +1,6 @@
 import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {CurrentUser} from '../decolators/current-user.decolator';
-import {CreateUserArgs} from './dto/create-user.argstype';
+import {CreateUserInput} from './dto/create-user.input';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -33,7 +33,8 @@ export class UsersResolver {
   @Mutation(() => User, {nullable: false})
   async createUser(
     @CurrentUser() currentUser: {sub: string},
-    @Args('payload', {type: () => CreateUserArgs}) payload: CreateUserArgs,
+    @Args('createUserData', {type: () => CreateUserInput})
+    payload: CreateUserInput,
   ) {
     return this.usersService.createUser(currentUser.sub, payload);
   }
