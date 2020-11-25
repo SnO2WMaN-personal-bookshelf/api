@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {NestFactory} from '@nestjs/core';
 import {
   GraphQLSchemaBuilderModule,
@@ -15,26 +16,30 @@ import {SearchResolver} from './search/search.resolver';
 import {SeriesRecordResolver, SeriesResolver} from './series/series.resolver';
 import {UsersResolver} from './users/users.resolver';
 
+const schemaPath = path.resolve(process.cwd(), 'schema.graphql');
+
 (async () => {
   const app = await NestFactory.create(GraphQLSchemaBuilderModule);
-  await app.init();
-
-  await app
-    .get(GraphQLSchemaFactory)
-    .create([
-      UsersResolver,
-      BookshelvesResolver,
-      BookshelfRecordsResolver,
-      BooksResolver,
-      AuthorsResolver,
-      SeriesResolver,
-      SeriesRecordResolver,
-      SearchResolver,
-    ])
-    .then((schema) => printSchema(schema))
-    .then((data) =>
-      promisify(writeFile)(path.resolve(process.cwd(), 'schema.graphql'), data),
-    );
-
-  await app.close();
+  try {
+    await app.init();
+    await app
+      .get(GraphQLSchemaFactory)
+      .create([
+        UsersResolver,
+        BookshelvesResolver,
+        BookshelfRecordsResolver,
+        BooksResolver,
+        AuthorsResolver,
+        SeriesResolver,
+        SeriesRecordResolver,
+        SearchResolver,
+      ])
+      .then((schema) => printSchema(schema))
+      .then((data) => promisify(writeFile)(schemaPath, data));
+  } catch (error) {
+    console.error(error);
+    process.exitCode = 1;
+  } finally {
+    await app.close();
+  }
 })();
