@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-prettier --check **/*.{json,yml,yaml,md} $1
+prettier --check **/*.{json,yml,yaml,md} $@
 
-prettier --check --parser json $1 \
+prettier --check --parser=json $@ \
   .eslintrc \
   .prettierrc \
   .optipackrc

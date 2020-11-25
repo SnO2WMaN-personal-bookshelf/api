@@ -1,4 +1,6 @@
 coverage/
+junit/
+
 dist/
 
 docker/

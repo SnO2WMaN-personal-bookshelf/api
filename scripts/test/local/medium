@@ -17,6 +17,6 @@ export TYPEORM_PORT=31001;
 docker-compose up -d -V;
 dockerize -wait tcp://${TYPEORM_HOST}:${TYPEORM_PORT} -timeout 1m
 
-jest --config=test/jest.medium.config.ts --runInBand $1;
+jest --config=test/jest.medium.config.ts --runInBand $@;
 
 docker-compose stop;

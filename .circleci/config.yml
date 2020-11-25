@@ -86,7 +86,7 @@ jobs:
           pkg-manager: yarn
       - run:
           command: |
-            yarn run test:unit --ci \
+            yarn run test:unit --ci --runInBand \
               --reporters=default --reporters=jest-junit \
               --testResultsProcessor=jest-junit
           environment:
@@ -122,7 +122,7 @@ jobs:
           pkg-manager: yarn
       - run:
           command: |
-            yarn run test:medium --ci \
+            yarn run test:medium --ci --runInBand \
               --reporters=default --reporters=jest-junit \
               --testResultsProcessor=jest-junit
           environment:
