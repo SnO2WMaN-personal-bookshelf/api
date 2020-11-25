@@ -6,6 +6,9 @@ npm-*.log
 yarn-*.log
 
 coverage/
+junit/
+
+.eslintcache
 
 .env*
 !.env.example
