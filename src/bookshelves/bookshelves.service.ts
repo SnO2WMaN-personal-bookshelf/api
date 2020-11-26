@@ -19,9 +19,13 @@ export class BookshelvesService {
   }
 
   async getBookshelf(id: string) {
-    return this.bookshelvesRepository.findOneOrFail(id, {
-      relations: ['records'],
-    });
+    return this.bookshelvesRepository
+      .findOneOrFail(id, {
+        relations: ['records'],
+      })
+      .catch(() => {
+        throw new Error(`Failed to get the bookshelf with id: ${id}`);
+      });
   }
 
   async totalRecords(id: string) {
