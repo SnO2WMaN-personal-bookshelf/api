@@ -1,10 +1,10 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
-import {BooksService} from '../books/books.service';
-import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
-import {BookshelfRecordsService} from './bookshelf-records.service';
-import {BookshelfRecord} from './entity/bookshelf-record.entity';
+import {BooksService} from '../../../books/books.service';
+import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
+import {BookshelfRecordsService} from '../../bookshelf-records.service';
+import {BookshelfRecord} from '../../entity/bookshelf-record.entity';
 
 describe('BookshelfRecordsService', () => {
   let service: BookshelfRecordsService;

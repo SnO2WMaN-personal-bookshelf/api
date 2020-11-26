@@ -1,6 +1,6 @@
 import {Test, TestingModule} from '@nestjs/testing';
-import {BooksService} from '../books/books.service';
-import {BookshelfRecordsResolver} from './bookshelf-records.resolver';
+import {BooksService} from '../../../books/books.service';
+import {BookshelfRecordsResolver} from '../../bookshelf-records.resolver';
 
 describe('BookshelfRecordsResolver', () => {
   let resolver: BookshelfRecordsResolver;

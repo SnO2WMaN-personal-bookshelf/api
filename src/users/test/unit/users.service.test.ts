@@ -1,9 +1,9 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
-import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
-import {User} from './entity/user.entity';
-import {UsersService} from './users.service';
+import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
+import {User} from '../../entity/user.entity';
+import {UsersService} from '../../users.service';
 
 describe('UsersService with mocked TypeORM repository', () => {
   let usersRepogitory: Repository<User>;

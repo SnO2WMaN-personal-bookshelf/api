@@ -3,10 +3,10 @@ import {getModelToken, MongooseModule} from '@nestjs/mongoose';
 import {Test, TestingModule} from '@nestjs/testing';
 import {MongoMemoryServer} from 'mongodb-memory-server';
 import {Model} from 'mongoose';
-import {LoggerModule} from '../logger/logger.module';
-import booksConfig from './books.config';
-import {BooksService} from './books.service';
-import {Book, BookSchema} from './schema/book.schema';
+import {LoggerModule} from '../../../logger/logger.module';
+import booksConfig from '../../books.config';
+import {BooksService} from '../../books.service';
+import {Book, BookSchema} from '../../schema/book.schema';
 
 describe('BookService', () => {
   let mongoServer: MongoMemoryServer;
