@@ -169,10 +169,10 @@ type User {
   name: String!
   displayName: String!
   picture: String
+  userBookshelves: [Bookshelf!]!
   readBooks: Bookshelf!
   readingBooks: Bookshelf!
   wishBooks: Bookshelf!
-  userBookshelves: [Bookshelf!]!
 }
 
 type Bookshelf {
