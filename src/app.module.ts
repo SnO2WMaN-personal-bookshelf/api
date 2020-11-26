@@ -5,12 +5,11 @@ import {GraphQLModule} from '@nestjs/graphql';
 import {MongooseModule} from '@nestjs/mongoose';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {AuthModule} from './auth/auth.module';
-import {Auth0Module} from './auth0/auth0.module';
+import {GraphQLAuthGuard} from './auth/graphql-auth.guard';
 import {AuthorsModule} from './authors/authors.module';
 import {BooksModule} from './books/books.module';
 import {BookshelfRecordsModule} from './bookshelf-records/bookshelf-records.module';
 import {BookshelvesModule} from './bookshelves/bookshelves.module';
-import {GraphQLAuthGuard} from './guards/graphql-auth.guard';
 import mongooseConfig from './mongoose/mongoose.config';
 import {MongooseService} from './mongoose/mongoose.service';
 import {SearchModule} from './search/search.module';
@@ -40,7 +39,6 @@ import {UsersModule} from './users/users.module';
     AuthorsModule,
     SeriesModule,
     AuthModule,
-    Auth0Module,
     SearchModule,
   ],
   providers: [
