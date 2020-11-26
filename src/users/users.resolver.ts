@@ -1,4 +1,13 @@
-import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+import {Bookshelf, BookshelfType} from '../bookshelves/entity/bookshelf.entity';
 import {CurrentUser} from './current-user.decolator';
 import {CreateUserInput} from './dto/create-user.input';
 import {User} from './entity/user.entity';
@@ -28,6 +37,21 @@ export class UsersResolver {
 
     if (user) return user;
     else throw new Error(`User with sub ${sub} doesn't exist`);
+  }
+
+  @ResolveField(() => Bookshelf, {nullable: false})
+  async readBooks(@Parent() user: User): Promise<Bookshelf> {
+    return this.usersService.findBookshelfByType(user, BookshelfType.READ);
+  }
+
+  @ResolveField(() => Bookshelf, {nullable: false})
+  async readingBooks(@Parent() user: User): Promise<Bookshelf> {
+    return this.usersService.findBookshelfByType(user, BookshelfType.READING);
+  }
+
+  @ResolveField(() => Bookshelf, {nullable: false})
+  async wishBooks(@Parent() user: User): Promise<Bookshelf> {
+    return this.usersService.findBookshelfByType(user, BookshelfType.WISH);
   }
 
   @Mutation(() => User, {nullable: false})

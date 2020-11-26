@@ -69,9 +69,6 @@ describe('UsersService(実際にDBに接続)', () => {
         'picture',
         'https://example.com/test_user',
       );
-      expect(newUser).toHaveProperty('readBooks');
-      expect(newUser).toHaveProperty('readingBooks');
-      expect(newUser).toHaveProperty('wishBooks');
     });
 
     it('displayNameが与えられなかった場合nameで代用', async () => {
@@ -128,23 +125,7 @@ describe('UsersService(実際にDBに接続)', () => {
         expect(actual).toHaveProperty('displayName', newUser.displayName);
         expect(actual).toHaveProperty('picture', newUser.picture);
 
-        expect(actual).toHaveProperty('readBooks');
-        expect(actual.readBooks).toBeDefined();
-
-        expect(actual).toHaveProperty('readingBooks');
-        expect(actual.readingBooks).toBeDefined();
-
-        expect(actual).toHaveProperty('wishBooks');
-        expect(actual.wishBooks).toBeDefined();
-      });
-
-      it('ユーザーの読んだ本，呼んでいる本，読みたい本のIDがすべて異なる', async () => {
-        const actual = (await usersService.getUserById(newUser.id))!;
-
-        expect(actual.readBooks.id).not.toBe(actual.readingBooks.id);
-        expect(actual.readBooks.id).not.toBe(actual.wishBooks.id);
-
-        expect(actual.readingBooks.id).not.toBe(actual.wishBooks.id);
+        expect(actual).toHaveProperty('userBookshelves');
       });
     });
   });

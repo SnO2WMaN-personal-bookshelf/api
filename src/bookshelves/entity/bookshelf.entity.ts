@@ -39,7 +39,10 @@ export class Bookshelf {
   @JoinColumn()
   records!: BookshelfRecord[];
 
-  @ManyToOne(() => User, {nullable: false, eager: true})
+  @ManyToOne(() => User, (user) => user.userBookshelves, {
+    nullable: false,
+    eager: true,
+  })
   @Field((type) => User)
   owner!: User;
 }

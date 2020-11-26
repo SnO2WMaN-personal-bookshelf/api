@@ -1,11 +1,5 @@
 import {Field, ID, ObjectType} from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Bookshelf} from '../../bookshelves/entity/bookshelf.entity';
 
 @Entity()
@@ -31,28 +25,9 @@ export class User {
   @Field({nullable: true})
   picture?: string;
 
-  @OneToOne((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
-    nullable: false,
+  @OneToMany((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
     cascade: true,
   })
-  @Field(() => Bookshelf)
-  readBooks!: Bookshelf;
-
-  @OneToOne((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
-    nullable: false,
-    cascade: true,
-  })
-  @Field(() => Bookshelf)
-  readingBooks!: Bookshelf;
-
-  @OneToOne((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
-    nullable: false,
-    cascade: true,
-  })
-  @Field(() => Bookshelf)
-  wishBooks!: Bookshelf;
-
-  @OneToMany((type) => Bookshelf, (bookshelf) => bookshelf.owner)
   @Field(() => [Bookshelf])
   userBookshelves!: Bookshelf[];
 }

@@ -56,6 +56,38 @@ describe('UsersResolver with mocked TypeORM repository', () => {
     expect(UsersResolver).toBeDefined();
   });
 
+  describe('readBooks(),readingBooks(),wishBooks()', () => {
+    let user: User;
+
+    beforeEach(async () => {
+      user = await usersService.createUser('auth0:1', {
+        name: 'test_user',
+        displayName: 'Display Name',
+      });
+    });
+
+    it('取得可能であることを確認', async () => {
+      const readBooks = await usersResolver.readBooks(user);
+      const readingBooks = await usersResolver.readingBooks(user);
+      const wishBooks = await usersResolver.wishBooks(user);
+
+      expect(readBooks).toBeDefined();
+      expect(readingBooks).toBeDefined();
+      expect(wishBooks).toBeDefined();
+    });
+
+    it('全て異なることを確認', async () => {
+      const readBooks = await usersResolver.readBooks(user);
+      const readingBooks = await usersResolver.readingBooks(user);
+      const wishBooks = await usersResolver.wishBooks(user);
+
+      expect(readBooks.id).not.toBe(readingBooks.id);
+      expect(readBooks.id).not.toBe(wishBooks.id);
+
+      expect(readingBooks.id).not.toBe(wishBooks.id);
+    });
+  });
+
   describe('createUser()', () => {
     it('createUserを呼び出してユーザーが生成される', async () => {
       const newUser = await usersResolver.createUser(
