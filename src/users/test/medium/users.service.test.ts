@@ -12,7 +12,7 @@ import {TypeORMConfigService} from '../../../typeorm/typeorm.service';
 import {User} from '../../entity/user.entity';
 import {UsersService} from '../../users.service';
 
-describe('UsersService with connected DB', () => {
+describe('UsersService(実際にDBに接続)', () => {
   let module: TestingModule;
 
   let connection: Connection;
@@ -69,9 +69,6 @@ describe('UsersService with connected DB', () => {
         'picture',
         'https://example.com/test_user',
       );
-      expect(newUser).toHaveProperty('readBooks');
-      expect(newUser).toHaveProperty('readingBooks');
-      expect(newUser).toHaveProperty('wishBooks');
     });
 
     it('displayNameが与えられなかった場合nameで代用', async () => {
@@ -104,6 +101,32 @@ describe('UsersService with connected DB', () => {
       await expect(
         usersService.createUser('auth0:2', {name: 'test_user_1'}),
       ).rejects.toThrow(`User name test_user_1 is already used`);
+    });
+  });
+
+  describe('getUserById()', () => {
+    describe('createUserでユーザーを生成する', () => {
+      let newUser: User;
+      beforeEach(async () => {
+        newUser = await usersService.createUser('auth0:1', {
+          name: 'test_user',
+          displayName: 'Test Name',
+          picture: 'https://example.com/test_user',
+        });
+      });
+
+      it('ユーザーを取得してプロパティを検証', async () => {
+        const actual = (await usersService.getUserById(newUser.id))!;
+        expect(actual).toBeDefined();
+
+        expect(actual).toHaveProperty('id', newUser.id);
+
+        expect(actual).toHaveProperty('name', newUser.name);
+        expect(actual).toHaveProperty('displayName', newUser.displayName);
+        expect(actual).toHaveProperty('picture', newUser.picture);
+
+        expect(actual).toHaveProperty('userBookshelves');
+      });
     });
   });
 });

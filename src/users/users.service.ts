@@ -16,7 +16,7 @@ export class UsersService {
 
   async getUserById(id: string) {
     return this.usersRepository.findOne(id, {
-      relations: ['readBooks', 'readingBooks', 'wishBooks', 'userBookshelves'],
+      relations: ['userBookshelves'],
     });
   }
 
@@ -62,15 +62,28 @@ export class UsersService {
       auth0Sub: sub,
       ...payload,
       displayName: displayName || payload.name,
-      readBooks: this.bookshelvesRepository.create({
-        type: BookshelfType.WISH,
-      }),
-      readingBooks: this.bookshelvesRepository.create({
-        type: BookshelfType.READING,
-      }),
-      wishBooks: this.bookshelvesRepository.create({
-        type: BookshelfType.WISH,
-      }),
+      userBookshelves: this.bookshelvesRepository.create([
+        {type: BookshelfType.READ},
+        {type: BookshelfType.READING},
+        {type: BookshelfType.WISH},
+      ]),
     });
+  }
+
+  async findBookshelfByType(
+    user: User,
+    type: BookshelfType.READ | BookshelfType.READING | BookshelfType.WISH,
+  ): Promise<Bookshelf> {
+    return this.bookshelvesRepository
+      .findOneOrFail({
+        where: {owner: user, type},
+      })
+      .catch(() => {
+        throw new Error(
+          `Failed to fetch the ${type.toLowerCase()} bookshelf for user: ${
+            user.id
+          }`,
+        );
+      });
   }
 }
