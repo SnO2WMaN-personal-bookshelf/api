@@ -1,7 +1,6 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
-import {Auth0Service} from '../auth0/auth0.service';
 import {Bookshelf} from '../bookshelves/entity/bookshelf.entity';
 import {User} from './entity/user.entity';
 import {UsersResolver} from './users.resolver';
@@ -18,7 +17,6 @@ describe('UsersResolver with mocked TypeORM repository', () => {
         {provide: getRepositoryToken(Bookshelf), useClass: Repository},
         UsersService,
         UsersResolver,
-        {provide: Auth0Service, useValue: {}},
       ],
     }).compile();
 
