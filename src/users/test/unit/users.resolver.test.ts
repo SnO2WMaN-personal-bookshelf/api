@@ -2,6 +2,7 @@ import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
+import {CurrentUserStatus} from '../../dto/current-user.return';
 import {User} from '../../entity/user.entity';
 import {UsersResolver} from '../../users.resolver';
 import {UsersService} from '../../users.service';
@@ -35,7 +36,7 @@ describe('UsersResolver with mocked TypeORM repository', () => {
   });
 
   describe('currentUser()', () => {
-    it('与えられたsubに紐付けられたユーザーが存在するならそれを返す', async () => {
+    it('与えられたsubに紐付けられたユーザーが存在するなら問題なく返す', async () => {
       jest.spyOn(usersService, 'getUserFromAuth0Sub').mockResolvedValueOnce({
         auth0Sub: 'auth0:1',
         id: '1',
@@ -44,20 +45,27 @@ describe('UsersResolver with mocked TypeORM repository', () => {
       } as User);
       const actual = await usersResolver.currentUser({sub: 'auth0:1'});
 
-      expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
-      expect(actual).toHaveProperty('id', '1');
-      expect(actual).toHaveProperty('name', 'test_user');
-      expect(actual).toHaveProperty('displayName', 'Display Name');
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('status', CurrentUserStatus.SignedUp);
+
+      expect(actual.user).toBeDefined();
+      expect(actual.user).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(actual.user).toHaveProperty('id', '1');
+      expect(actual.user).toHaveProperty('name', 'test_user');
+      expect(actual.user).toHaveProperty('displayName', 'Display Name');
     });
 
-    it('与えられたsubに紐付けられたユーザーが存在しないならError発生', async () => {
+    it('与えられたsubに紐付けられたユーザーが存在しないなら未登録として返す', async () => {
       jest
         .spyOn(usersService, 'getUserFromAuth0Sub')
         .mockResolvedValueOnce(undefined);
 
-      await expect(usersResolver.currentUser({sub: 'auth0:1'})).rejects.toThrow(
-        "User with sub auth0:1 doesn't exist",
-      );
+      const actual = await usersResolver.currentUser({sub: 'auth0:1'});
+
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('status', CurrentUserStatus.NotSignedUp);
+
+      expect(actual.user).not.toBeDefined();
     });
   });
 

@@ -10,6 +10,10 @@ import {
 import {Bookshelf, BookshelfType} from '../bookshelves/entity/bookshelf.entity';
 import {CurrentUser} from './current-user.decolator';
 import {CreateUserInput} from './dto/create-user.input';
+import {
+  CurrentUserReturnType,
+  CurrentUserStatus,
+} from './dto/current-user.return';
 import {User} from './entity/user.entity';
 import {UsersService} from './users.service';
 
@@ -31,12 +35,14 @@ export class UsersResolver {
     throw new Error('Unexist user!');
   }
 
-  @Query(() => User, {nullable: false})
-  async currentUser(@CurrentUser() {sub}: {sub: string}): Promise<User> {
-    const user = await this.usersService.getUserFromAuth0Sub(sub);
-
-    if (user) return user;
-    else throw new Error(`User with sub ${sub} doesn't exist`);
+  @Query(() => CurrentUserReturnType)
+  async currentUser(
+    @CurrentUser() {sub}: {sub: string},
+  ): Promise<CurrentUserReturnType> {
+    return this.usersService.getUserFromAuth0Sub(sub).then((user) => ({
+      status: user ? CurrentUserStatus.SignedUp : CurrentUserStatus.NotSignedUp,
+      user,
+    }));
   }
 
   @ResolveField(() => Bookshelf, {nullable: false})
