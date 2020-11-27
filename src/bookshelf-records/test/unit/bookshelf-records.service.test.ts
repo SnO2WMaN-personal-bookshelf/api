@@ -7,10 +7,12 @@ import {BookshelfRecordsService} from '../../bookshelf-records.service';
 import {BookshelfRecord} from '../../entity/bookshelf-record.entity';
 
 describe('BookshelfRecordsService', () => {
+  let module: TestingModule;
+
   let service: BookshelfRecordsService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         {
           provide: getRepositoryToken(BookshelfRecord),
@@ -33,6 +35,10 @@ describe('BookshelfRecordsService', () => {
     }).compile();
 
     service = module.get<BookshelfRecordsService>(BookshelfRecordsService);
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {
