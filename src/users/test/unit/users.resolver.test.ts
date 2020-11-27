@@ -7,11 +7,13 @@ import {UsersResolver} from '../../users.resolver';
 import {UsersService} from '../../users.service';
 
 describe('UsersResolver with mocked TypeORM repository', () => {
+  let module: TestingModule;
+
   let usersService: UsersService;
   let usersResolver: UsersResolver;
 
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         {provide: getRepositoryToken(User), useClass: Repository},
         {provide: getRepositoryToken(Bookshelf), useClass: Repository},
@@ -22,6 +24,10 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
     usersService = module.get<UsersService>(UsersService);
     usersResolver = module.get<UsersResolver>(UsersResolver);
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {

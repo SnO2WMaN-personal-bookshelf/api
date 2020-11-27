@@ -6,13 +6,15 @@ import {User} from '../../entity/user.entity';
 import {UsersService} from '../../users.service';
 
 describe('UsersService with mocked TypeORM repository', () => {
+  let module: TestingModule;
+
   let usersRepogitory: Repository<User>;
   let bookshelvesRepogitory: Repository<Bookshelf>;
 
   let usersService: UsersService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         {provide: getRepositoryToken(User), useClass: Repository},
         {provide: getRepositoryToken(Bookshelf), useClass: Repository},
@@ -25,6 +27,10 @@ describe('UsersService with mocked TypeORM repository', () => {
       getRepositoryToken(Bookshelf),
     );
     usersService = module.get<UsersService>(UsersService);
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {

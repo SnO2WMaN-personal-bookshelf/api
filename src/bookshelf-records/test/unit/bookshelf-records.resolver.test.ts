@@ -3,10 +3,12 @@ import {BooksService} from '../../../books/books.service';
 import {BookshelfRecordsResolver} from '../../bookshelf-records.resolver';
 
 describe('BookshelfRecordsResolver', () => {
+  let module: TestingModule;
+
   let resolver: BookshelfRecordsResolver;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [
         {
           provide: BookshelfRecordsResolver,
@@ -24,6 +26,10 @@ describe('BookshelfRecordsResolver', () => {
     }).compile();
 
     resolver = module.get<BookshelfRecordsResolver>(BookshelfRecordsResolver);
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {
