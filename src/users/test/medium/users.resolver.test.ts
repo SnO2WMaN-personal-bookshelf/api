@@ -9,6 +9,7 @@ import {Connection, Repository} from 'typeorm';
 import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
 import typeormConfig from '../../../typeorm/typeorm.config';
 import {TypeORMConfigService} from '../../../typeorm/typeorm.service';
+import {CurrentUserStatus} from '../../dto/current-user.return';
 import {User} from '../../entity/user.entity';
 import {UsersResolver} from '../../users.resolver';
 import {UsersService} from '../../users.service';
@@ -133,10 +134,13 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
       const actual = await usersResolver.currentUser({sub: 'auth0:1'});
 
-      expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
-      expect(actual).toHaveProperty('id');
-      expect(actual).toHaveProperty('name', 'test_user');
-      expect(actual).toHaveProperty('displayName', 'Display Name');
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('status', CurrentUserStatus.SignedUp);
+
+      expect(actual.user).toBeDefined();
+      expect(actual.user).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(actual.user).toHaveProperty('name', 'test_user');
+      expect(actual.user).toHaveProperty('displayName', 'Display Name');
     });
 
     it('UserResolverのcreateUserでユーザーを作成した後，UserResolverのcurrentUserを呼び出す', async () => {
@@ -151,17 +155,22 @@ describe('UsersResolver with mocked TypeORM repository', () => {
 
       const actual = await usersResolver.currentUser({sub: 'auth0:1'});
 
-      expect(actual).toHaveProperty('auth0Sub', 'auth0:1');
-      expect(actual).toHaveProperty('id');
-      expect(actual).toHaveProperty('name', 'test_user');
-      expect(actual).toHaveProperty('displayName', 'Display Name');
-      expect(actual).toHaveProperty('picture', 'https://example.com/test_user');
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('status', CurrentUserStatus.SignedUp);
+
+      expect(actual.user).toBeDefined();
+      expect(actual.user).toHaveProperty('auth0Sub', 'auth0:1');
+      expect(actual.user).toHaveProperty('name', 'test_user');
+      expect(actual.user).toHaveProperty('displayName', 'Display Name');
     });
 
     it('存在しないユーザーについてUserResolverのcurrentUserを呼び出すとエラー', async () => {
-      await expect(usersResolver.currentUser({sub: 'auth0:1'})).rejects.toThrow(
-        "User with sub auth0:1 doesn't exist",
-      );
+      const actual = await usersResolver.currentUser({sub: 'auth0:1'});
+
+      expect(actual).toBeDefined();
+      expect(actual).toHaveProperty('status', CurrentUserStatus.NotSignedUp);
+
+      expect(actual.user).not.toBeDefined();
     });
   });
 });
