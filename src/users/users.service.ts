@@ -1,5 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
+import * as jdenticon from 'jdenticon';
 import {Repository} from 'typeorm';
 import {Bookshelf, BookshelfType} from '../bookshelves/entity/bookshelf.entity';
 import {User} from './entity/user.entity';
@@ -61,6 +62,7 @@ export class UsersService {
     return this.usersRepository.save({
       auth0Sub: sub,
       ...payload,
+      picture: this.ensurePicture(payload),
       displayName: displayName || payload.name,
       userBookshelves: this.bookshelvesRepository.create([
         {type: BookshelfType.READ},
@@ -68,6 +70,15 @@ export class UsersService {
         {type: BookshelfType.WISH},
       ]),
     });
+  }
+
+  ensurePicture({name, picture}: {name: string; picture?: string}): string {
+    return (
+      picture ||
+      `data:image/png;base64,${jdenticon
+        .toPng(name, 64, {backColor: '#FFF'})
+        .toString('base64')}`
+    );
   }
 
   async findBookshelfByType(

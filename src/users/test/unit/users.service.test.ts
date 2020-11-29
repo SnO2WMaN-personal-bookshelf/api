@@ -1,5 +1,6 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {getRepositoryToken} from '@nestjs/typeorm';
+import * as jdenticon from 'jdenticon';
 import {Repository} from 'typeorm';
 import {Bookshelf} from '../../../bookshelves/entity/bookshelf.entity';
 import {User} from '../../entity/user.entity';
@@ -61,6 +62,28 @@ describe('UsersService with mocked TypeORM repository', () => {
           displayName: 'Display Name',
         }),
       ).rejects.toThrow(`User name test_user is already used`);
+    });
+  });
+
+  describe('ensurePicture()', () => {
+    it('ある場合はその値を返す', () => {
+      const actual = usersService.ensurePicture({
+        name: 'test_user',
+        picture: 'https://example.com/test_user',
+      });
+      expect(actual).toBe('https://example.com/test_user');
+    });
+
+    it('ない場合はnameから生成される一意の値を返す', () => {
+      jest
+        .spyOn(jdenticon, 'toPng')
+        .mockImplementationOnce(() => Buffer.from('mocked'));
+
+      const actual = usersService.ensurePicture({
+        name: 'test_user',
+      });
+
+      expect(actual).toBe(Buffer.from('mocked').toString('base64'));
     });
   });
 });
