@@ -83,7 +83,9 @@ describe('UsersService with mocked TypeORM repository', () => {
         name: 'test_user',
       });
 
-      expect(actual).toBe(Buffer.from('mocked').toString('base64'));
+      expect(actual).toBe(
+        `data:image/png;base64,${Buffer.from('mocked').toString('base64')}`,
+      );
     });
   });
 });
