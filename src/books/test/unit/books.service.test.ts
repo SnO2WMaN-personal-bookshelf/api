@@ -11,6 +11,8 @@ import {Book, BookSchema} from '../../schema/book.schema';
 describe('BookService', () => {
   let mongoServer: MongoMemoryServer;
 
+  let module: TestingModule;
+
   let bookModel: Model<Book>;
 
   let bookService: BooksService;
@@ -21,7 +23,7 @@ describe('BookService', () => {
   });
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [
         MongooseModule.forRootAsync({
           useFactory: async () => ({uri: await mongoServer.getUri()}),
@@ -53,6 +55,8 @@ describe('BookService', () => {
 
   afterAll(async () => {
     await mongoServer.stop();
+
+    await module.close();
   });
 
   it('should be defined', () => {
