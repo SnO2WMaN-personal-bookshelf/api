@@ -168,7 +168,7 @@ type User {
   auth0Sub: String!
   name: String!
   displayName: String!
-  picture: String
+  picture: String!
   userBookshelves: [Bookshelf!]!
   readBooks: Bookshelf!
   readingBooks: Bookshelf!

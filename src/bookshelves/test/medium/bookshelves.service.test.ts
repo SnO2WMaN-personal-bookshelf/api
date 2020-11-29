@@ -70,6 +70,7 @@ describe('BookshelvesService(実際にDBに接続)', () => {
           auth0Sub: 'auth0:1',
           name: 'test_user',
           displayName: 'Test User',
+          picture: 'https://example.com/test_user',
         });
         newBookshelf = await bookshelvesRepogitory.save({
           title: 'New Bookshelf',
@@ -109,6 +110,7 @@ describe('BookshelvesService(実際にDBに接続)', () => {
         auth0Sub: 'auth0:1',
         name: 'test_user',
         displayName: 'Test User',
+        picture: 'https://example.com/test_user',
       });
       newBookshelf = await bookshelvesRepogitory.save({
         title: 'New Bookshelf',

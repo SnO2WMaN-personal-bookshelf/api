@@ -80,11 +80,11 @@ describe('UsersService(実際にDBに接続)', () => {
       expect(newUser).toHaveProperty('displayName', 'test_user');
     });
 
-    it('pictureが与えられなかった場合nullになる', async () => {
+    it('pictureが与えられなかった場合nameから一意の画像を生成', async () => {
       const newUser = await usersService.createUser('auth0:1', {
         name: 'test_user',
       });
-      expect(newUser).toHaveProperty('picture', null);
+      expect(newUser.picture).toBeDefined();
     });
 
     it('subが重複している場合はエラーを返す', async () => {

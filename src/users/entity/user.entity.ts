@@ -21,9 +21,9 @@ export class User {
   @Field()
   displayName!: string;
 
-  @Column({nullable: true})
-  @Field({nullable: true})
-  picture?: string;
+  @Column()
+  @Field()
+  picture!: string;
 
   @OneToMany((type) => Bookshelf, (bookshelf) => bookshelf.owner, {
     cascade: true,
