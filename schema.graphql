@@ -239,6 +239,16 @@ type SerialSeriesRecordConnection {
   edges: [SerialSeriesRecordEdgeType!]!
 }
 
+type CurrentUserReturnType {
+  status: UserStatus!
+  user: User
+}
+
+enum UserStatus {
+  NotSignedUp
+  SignedUp
+}
+
 type Query {
   author(id: ID!): Author!
   allAuthors: [Author!]!
@@ -251,7 +261,7 @@ type Query {
   series(id: ID!): Series!
   allSeries: [Series!]!
   user(name: String, id: ID): User!
-  currentUser: User!
+  currentUser: CurrentUserReturnType!
   allUsers: [User!]!
 }
 
